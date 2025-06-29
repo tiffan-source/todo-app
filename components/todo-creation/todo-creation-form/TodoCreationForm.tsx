@@ -4,14 +4,27 @@ import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
+import { injectComponent, DependenciesOf } from "react-obsidian";
+import { TodoCreationGraph } from "@/configs/todo-creation/todo-creation.graph";
 
 type TodoCreationForms = {
     title: string;
     description: string;
 };
 
-const TodoCreationForm = () => {
-    const { control, handleSubmit, formState } = useForm<TodoCreationForms>();
+const TodoCreationForm = ({
+    createTodoController,
+}: DependenciesOf<TodoCreationGraph, "createTodoController">) => {
+    const { control, handleSubmit, formState } = useForm<TodoCreationForms>({
+        defaultValues: {
+            title: "",
+            description: "",
+        },
+    });
+
+    const createTodoSubmit = (data: TodoCreationForms) => {
+        console.log("Creating Todo with data:", data);
+    };
 
     return (
         <Box className="flex-1 p-4">
@@ -52,11 +65,11 @@ const TodoCreationForm = () => {
                 )}
             />
 
-            <Button>
+            <Button onPress={handleSubmit(createTodoSubmit)}>
                 <ButtonText>Create</ButtonText>
             </Button>
         </Box>
     );
 };
 
-export default TodoCreationForm;
+export default injectComponent(TodoCreationForm, TodoCreationGraph);

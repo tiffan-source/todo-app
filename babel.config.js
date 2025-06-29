@@ -10,6 +10,7 @@ module.exports = function (api) {
                 },
             ],
             "nativewind/babel",
+            ["@babel/preset-typescript", { onlyRemoveTypeImports: true }],
         ],
 
         plugins: [
@@ -24,6 +25,8 @@ module.exports = function (api) {
                     },
                 },
             ],
+            "react-obsidian/dist/transformers/babel-plugin-obsidian",
+            ["@babel/plugin-proposal-decorators", { version: "legacy" }],
         ],
     };
 };
