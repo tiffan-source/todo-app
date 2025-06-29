@@ -9,16 +9,14 @@
         "userInterfaceStyle": "automatic",
         "newArchEnabled": true,
         "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.blackgenius.todoapp"
+            "supportsTablet": true
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
             },
-            "edgeToEdgeEnabled": true,
-            "package": "com.blackgenius.todoapp"
+            "edgeToEdgeEnabled": true
         },
         "web": {
             "bundler": "metro",
@@ -36,9 +34,6 @@
                     "backgroundColor": "#ffffff"
                 }
             ]
-        ],
-        "experiments": {
-            "typedRoutes": true
-        }
+        ]
     }
 }

@@ -13,6 +13,7 @@
         "prepare": "husky"
     },
     "dependencies": {
+        "@babel/plugin-proposal-decorators": "^7.27.1",
         "@expo/vector-icons": "^14.1.0",
         "@gluestack-ui/button": "^1.0.14",
         "@gluestack-ui/icon": "^0.1.27",
@@ -45,15 +46,18 @@
         "react-native": "0.79.4",
         "react-native-css-interop": "^0.1.22",
         "react-native-gesture-handler": "~2.24.0",
-        "react-native-mmkv": "^3.3.0",
         "react-native-reanimated": "~3.17.4",
         "react-native-safe-area-context": "^5.5.0",
         "react-native-screens": "~4.11.1",
         "react-native-svg": "^15.2.0",
         "react-native-web": "~0.20.0",
         "react-native-webview": "13.13.5",
+        "react-obsidian": "^2.23.0",
         "tailwindcss": "^3.4.17",
-        "todo-usecase": "^1.1.1"
+        "todo-entity": "^1.1.4",
+        "todo-entity-default": "^1.1.0",
+        "todo-usecase": "^1.1.1",
+        "todo-usecase-default": "^1.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.25.2",
@@ -63,6 +67,7 @@
         "eslint": "^9.25.0",
         "eslint-config-expo": "~9.2.0",
         "eslint-config-prettier": "^10.1.5",
+        "eslint-plugin-obsidian": "^2.23.0",
         "eslint-plugin-prettier": "^5.5.1",
         "husky": "^9.1.7",
         "jscodeshift": "^0.15.2",
