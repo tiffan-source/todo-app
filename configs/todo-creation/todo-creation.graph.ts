@@ -15,7 +15,7 @@ import {
 } from "todo-usecase-default";
 import { ITodoFactory } from "todo-entity";
 import { TodoFactory } from "todo-entity-default";
-
+import { CreateTodoAsyncStorageRepository } from "@/infrastructure/repositories/todo-creation/create-todo.async-storage.repository";
 @singleton()
 @graph()
 export class TodoCreationGraph extends ObjectGraph {
@@ -58,14 +58,6 @@ export class TodoCreationGraph extends ObjectGraph {
 
     @provides()
     createTodoRepository(): ICreateTodoRepository {
-        return {
-            execute(
-                input: CreateTodoRepositoryInput
-            ): Promise<CreateTodoRepositoryOutput> {
-                return new Promise((resolve) => {
-                    resolve(input);
-                });
-            },
-        };
+        return new CreateTodoAsyncStorageRepository();
     }
 }

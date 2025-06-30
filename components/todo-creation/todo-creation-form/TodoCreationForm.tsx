@@ -23,7 +23,8 @@ const TodoCreationForm = ({
     });
 
     const createTodoSubmit = (data: TodoCreationForms) => {
-        console.log("Creating Todo with data:", data);
+        console.log(formState);
+        createTodoController.createTodo(data.title, data.description);
     };
 
     return (
@@ -42,7 +43,7 @@ const TodoCreationForm = ({
                         <InputField
                             placeholder="New Task"
                             value={value}
-                            onChange={onChange}
+                            onChangeText={onChange}
                         />
                     </Input>
                 )}
@@ -59,7 +60,7 @@ const TodoCreationForm = ({
                         <TextareaInput
                             placeholder="Enter detailed description..."
                             value={value}
-                            onChange={onChange}
+                            onChangeText={onChange}
                         />
                     </Textarea>
                 )}
