@@ -9,12 +9,11 @@ export class CreateTodoAsyncStorageRepository implements ICreateTodoRepository {
     async execute(
         input: CreateTodoRepositoryInput
     ): Promise<CreateTodoRepositoryOutput> {
-        const jsonData = JSON.stringify(input);
+        const jsonData = JSON.stringify([input]);
         try {
             await AsyncStorage.setItem("todos", jsonData);
             return input;
         } catch (error) {
-            console.error("Error saving todo:", error);
             throw new Error("Failed to save todo");
         }
     }
