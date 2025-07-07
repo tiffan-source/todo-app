@@ -1,9 +1,11 @@
-import { CreateTodoController } from "@/components/todo-creation/todo-creation-form/controllers/create-todo.controllers";
-import { CreateTodoPresenter } from "@/components/todo-creation/todo-creation-form/presenters/create-todo.presenter";
+import { CreateTodoController } from "@/features/todo-creation/controllers/create-todo.controller";
+import { CreateTodoPresenter } from "@/features/todo-creation/presenters/create-todo.presenter";
+import { CreateTodoAsyncStorageRepository } from "@/infrastructure/repositories/todo-creation/create-todo.async-storage.repository";
+import "react-native-get-random-values"; // Todo factory requires this polyfill since it uses uuid
 import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
+import { ITodoFactory } from "todo-entity";
+import { TodoFactory } from "todo-entity-default";
 import {
-    CreateTodoRepositoryInput,
-    CreateTodoRepositoryOutput,
     ICreateTodoInteractor,
     ICreateTodoPresenter,
     ICreateTodoRepository,
@@ -13,16 +15,13 @@ import {
     CreateTodoInteractor,
     CreateTodoValidation,
 } from "todo-usecase-default";
-import { ITodoFactory } from "todo-entity";
-import { TodoFactory } from "todo-entity-default";
-import { CreateTodoAsyncStorageRepository } from "@/infrastructure/repositories/todo-creation/create-todo.async-storage.repository";
+import { AppGraph } from "../app.graph";
+
 @singleton()
-@graph()
+@graph({ subgraphs: [AppGraph] })
 export class TodoCreationGraph extends ObjectGraph {
     @provides()
-    createTodoController(
-        createTodoUseCase: ICreateTodoInteractor
-    ): CreateTodoController {
+    createTodoController(createTodoUseCase: ICreateTodoInteractor) {
         return new CreateTodoController(createTodoUseCase);
     }
 
