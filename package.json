@@ -14,8 +14,10 @@
     },
     "dependencies": {
         "@babel/plugin-proposal-decorators": "^7.27.1",
+        "@expo/html-elements": "^0.4.2",
         "@expo/vector-icons": "^14.1.0",
         "@gluestack-ui/button": "^1.0.14",
+        "@gluestack-ui/checkbox": "^0.1.39",
         "@gluestack-ui/form-control": "^0.1.19",
         "@gluestack-ui/icon": "^0.1.27",
         "@gluestack-ui/input": "^0.1.38",
@@ -57,9 +59,9 @@
         "react-native-webview": "13.13.5",
         "react-obsidian": "^2.23.0",
         "tailwindcss": "^3.4.17",
-        "todo-entity": "^1.1.4",
+        "todo-entity": "^2.0.0",
         "todo-entity-default": "^1.1.0",
-        "todo-usecase": "^2.0.1",
+        "todo-usecase": "^3.0.0",
         "todo-usecase-default": "^1.6.1"
     },
     "devDependencies": {
