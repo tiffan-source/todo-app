@@ -1,16 +1,18 @@
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
 import {
     GetAllTodoOutput,
+    GetUncompletedTodosOutput,
     IGetAllTodoPresenter,
+    IGetUncompletedTodosPresenter,
     outputDto,
 } from "todo-usecase";
 
-export class GetAllTodoPresenter
-    implements IGetAllTodoPresenter<TodoTicketViewModel[]>
+export class GetAllUnaccomplishedTodoPresenter
+    implements IGetUncompletedTodosPresenter<TodoTicketViewModel[]>
 {
     private callback?: (data: TodoTicketViewModel[]) => void;
 
-    present(output: outputDto<GetAllTodoOutput>): void {
+    present(output: outputDto<GetUncompletedTodosOutput>): void {
         this.callback?.(
             output.result === undefined
                 ? []

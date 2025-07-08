@@ -1,7 +1,7 @@
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
-import { GetAllTodoController } from "@/back-for-front/todo-retrieval/controllers/get-all-todo.controller";
-import { GetAllTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-todo.presenter";
-import { GetAllTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-retrieval/get-all-todo.async-storage.repository";
+import { GetAllUnaccomplishedTodoTodoController } from "@/back-for-front/todo-retrieval/controllers/get-all-unaccomplishedTodo-todo.controller";
+import { GetAllUnaccomplishedTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-unaccomplishedTodo-todo.presenter";
+import { GetAllUnaccomplishedTodoTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-retrieval/get-all-unaccomplishedTodo-todo.async-storage.repository";
 import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
 import { ITodoFactory } from "todo-entity";
 import { TodoFactory } from "todo-entity-default";
@@ -9,36 +9,52 @@ import {
     IGetAllTodoInteractor,
     IGetAllTodoPresenter,
     IGetAllTodoRepository,
+    IGetUncompletedTodosInteractor,
+    IGetUncompletedTodosPresenter,
+    IGetUncompletedTodosRepository,
 } from "todo-usecase";
-import { GetAllTodoInteractor } from "todo-usecase-default";
+import {
+    GetAllTodoInteractor,
+    GetUncompletedTodosInteractor,
+} from "todo-usecase-default";
 
 @singleton()
 @graph()
 export class TodoRetrievalGraph extends ObjectGraph {
     @provides()
-    getAllTodoController(getAllTodoUseCase: IGetAllTodoInteractor) {
-        return new GetAllTodoController(getAllTodoUseCase);
-    }
-
-    @provides()
-    getAllTodoUseCase(
-        getAllTodoRepository: IGetAllTodoRepository,
-        getAllTodoPresenter: IGetAllTodoPresenter
-    ): IGetAllTodoInteractor {
-        return new GetAllTodoInteractor(
-            getAllTodoRepository,
-            getAllTodoPresenter
+    getAllUnaccomplishedTodoController(
+        getAllUnaccomplishedTodoUseCase: IGetUncompletedTodosInteractor
+    ) {
+        return new GetAllUnaccomplishedTodoTodoController(
+            getAllUnaccomplishedTodoUseCase
         );
     }
 
     @provides()
-    getAllTodoPresenter(): IGetAllTodoPresenter<TodoTicketViewModel[]> {
-        return new GetAllTodoPresenter();
+    getAllUnaccomplishedTodoUseCase(
+        getAllUnaccomplishedTodoRepository: IGetUncompletedTodosRepository,
+        getAllUnaccomplishedTodoPresenter: IGetUncompletedTodosPresenter
+    ): IGetUncompletedTodosInteractor {
+        return new GetUncompletedTodosInteractor(
+            getAllUnaccomplishedTodoRepository,
+            getAllUnaccomplishedTodoPresenter
+        );
     }
 
     @provides()
-    getAllTodoRepository(todoFactory: ITodoFactory): IGetAllTodoRepository {
-        return new GetAllTodoAsyncStorageRepository(todoFactory);
+    getAllUnaccomplishedTodoPresenter(): IGetUncompletedTodosPresenter<
+        TodoTicketViewModel[]
+    > {
+        return new GetAllUnaccomplishedTodoPresenter();
+    }
+
+    @provides()
+    getAllUnaccomplishedTodoRepository(
+        todoFactory: ITodoFactory
+    ): IGetUncompletedTodosRepository {
+        return new GetAllUnaccomplishedTodoTodoAsyncStorageRepository(
+            todoFactory
+        );
     }
 
     @provides()

@@ -4,21 +4,23 @@ import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
-let useGetAllTodo = ({
-    getAllTodoController,
-    getAllTodoPresenter,
+let useGetAllUnaccomplishedTodoTodo = ({
+    getAllUnaccomplishedTodoController,
+    getAllUnaccomplishedTodoPresenter,
 }: DependenciesOf<
     TodoRetrievalGraph,
-    "getAllTodoController" | "getAllTodoPresenter"
+    "getAllUnaccomplishedTodoController" | "getAllUnaccomplishedTodoPresenter"
 >) => {
     const [todos, setTodos] = useState<TodoTicketViewModel[]>([]);
 
     useFocusEffect(
         useCallback(() => {
-            getAllTodoController.getAllTodos();
-            getAllTodoPresenter.setCallback((data: TodoTicketViewModel[]) => {
-                setTodos(data);
-            });
+            getAllUnaccomplishedTodoController.getAllTodos();
+            getAllUnaccomplishedTodoPresenter.setCallback(
+                (data: TodoTicketViewModel[]) => {
+                    setTodos(data);
+                }
+            );
         }, [])
     );
 
@@ -27,4 +29,4 @@ let useGetAllTodo = ({
     };
 };
 
-export default injectHook(useGetAllTodo, TodoRetrievalGraph);
+export default injectHook(useGetAllUnaccomplishedTodoTodo, TodoRetrievalGraph);

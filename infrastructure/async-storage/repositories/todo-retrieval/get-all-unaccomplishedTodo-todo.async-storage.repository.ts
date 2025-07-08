@@ -1,15 +1,17 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ITodo, ITodoFactory } from "todo-entity";
 import {
-    GetAllTodoRepositoryOutput,
-    IGetAllTodoRepository,
+    GetUncompletedTodosRepositoryOutput,
+    IGetUncompletedTodosRepository,
 } from "todo-usecase";
 import { TodoRepoSaveModel } from "@/infrastructure/async-storage/repositories/common/repository.model";
 
-export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
+export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
+    implements IGetUncompletedTodosRepository
+{
     constructor(private readonly todoFactory: ITodoFactory) {}
 
-    async execute(): Promise<GetAllTodoRepositoryOutput> {
+    async execute(): Promise<GetUncompletedTodosRepositoryOutput> {
         try {
             const jsonData = await AsyncStorage.getItem("todos");
             if (jsonData) {
@@ -24,7 +26,9 @@ export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
                     if (todo.description) {
                         domainTodo.description = todo.description;
                     }
-                    result.push(domainTodo);
+                    if (!todo.doneDate) {
+                        result.push(domainTodo);
+                    }
                 });
 
                 return result;

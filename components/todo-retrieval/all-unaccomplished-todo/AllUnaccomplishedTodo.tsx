@@ -1,6 +1,6 @@
 import { View, FlatList } from "react-native";
 import React from "react";
-import useGetAllTodo from "./hooks/get-all-todo.hooks";
+import useGetAllTodo from "./hooks/get-unaccomplished-todo.hooks";
 import { Card } from "@/components/ui/card";
 import {
     Checkbox,
@@ -10,7 +10,7 @@ import {
 import { CheckIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 
-const AllListedTodo = () => {
+const AllUnaccomplishedTodo = () => {
     const { todos } = useGetAllTodo();
     return (
         <FlatList
@@ -45,4 +45,4 @@ const AllListedTodo = () => {
     );
 };
 
-export default AllListedTodo;
+export default AllUnaccomplishedTodo;
