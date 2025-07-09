@@ -16,9 +16,10 @@ import {
     CreateTodoInteractor,
     CreateTodoValidation,
 } from "todo-usecase-default";
+import { CommonGraph } from "../common/common.graph";
 
 @singleton()
-@graph()
+@graph({ subgraphs: [CommonGraph] })
 export class TodoCreationGraph extends ObjectGraph {
     @provides()
     createTodoController(createTodoUseCase: ICreateTodoInteractor) {
@@ -38,11 +39,6 @@ export class TodoCreationGraph extends ObjectGraph {
             createTodoPresenter,
             todoFactory
         );
-    }
-
-    @provides()
-    todoFactory(): ITodoFactory {
-        return new TodoFactory();
     }
 
     @provides()
