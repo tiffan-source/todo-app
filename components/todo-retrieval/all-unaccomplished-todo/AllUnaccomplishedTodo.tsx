@@ -9,8 +9,12 @@ import {
 } from "@/components/ui/checkbox";
 import { CheckIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
+import { DependenciesOf, injectComponent } from "react-obsidian";
+import { TodoModificationGraph } from "@/main/todo-modification/todo-modificaton.graph";
 
-const AllUnaccomplishedTodo = () => {
+const AllUnaccomplishedTodo = ({
+    checkTodoController,
+}: DependenciesOf<TodoModificationGraph, "checkTodoController">) => {
     const { todos } = useGetAllTodo();
     return (
         <FlatList
@@ -23,8 +27,11 @@ const AllUnaccomplishedTodo = () => {
                 >
                     <Checkbox
                         className="mt-1"
-                        value="checked"
+                        value={item.checked ? "checked" : "unchecked"} // This must always be unchecked
                         size="md"
+                        onChange={() => {
+                            checkTodoController.checkTodo(item.id);
+                        }}
                     >
                         <CheckboxIndicator>
                             <CheckboxIcon as={CheckIcon} />
@@ -45,4 +52,4 @@ const AllUnaccomplishedTodo = () => {
     );
 };
 
-export default AllUnaccomplishedTodo;
+export default injectComponent(AllUnaccomplishedTodo, TodoModificationGraph);
