@@ -9,12 +9,14 @@ import {
 import { AlertCircleIcon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
-import { TodoCreationGraph } from "@/main/todo-creation/todo-creation.graph";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Keyboard, Text, TouchableWithoutFeedback } from "react-native";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { DependenciesOf, injectComponent } from "react-obsidian";
 import useTodoCreationForm from "./hooks/create-todo-form.hooks";
+import { Text } from "@/components/ui/text";
+import { useLabelInputHook } from "./hooks/label-input.hook";
+import { ControllerGraph } from "@/main/controller.graph";
 
 type TodoCreationForms = {
     title: string;
@@ -23,7 +25,7 @@ type TodoCreationForms = {
 
 const TodoCreationForm = ({
     createTodoController,
-}: DependenciesOf<TodoCreationGraph, "createTodoController">) => {
+}: DependenciesOf<ControllerGraph, "createTodoController">) => {
     const {
         control,
         handleSubmit,
@@ -37,6 +39,9 @@ const TodoCreationForm = ({
 
     const { creationError, waitingForCreation, setWaitingForCreation } =
         useTodoCreationForm();
+
+    const { handleLabelTypingInput, tags, label, removeTagOnPress } =
+        useLabelInputHook();
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -87,13 +92,37 @@ const TodoCreationForm = ({
                     )}
                 />
 
+                <Box className="flex-row flex-wrap gap-2 mb-4">
+                    {tags.map((tag, index) => (
+                        <Text
+                            onPress={() => removeTagOnPress(index)}
+                            key={index}
+                            className="text-primary-950 font-semibold"
+                        >
+                            #{tag}
+                        </Text>
+                    ))}
+                </Box>
+
+                <Input
+                    variant="underlined"
+                    className="flex-row gap-2 flex-wrap"
+                >
+                    <InputField
+                        onChangeText={handleLabelTypingInput}
+                        value={label}
+                        placeholder="#Tags"
+                    />
+                </Input>
+
                 <Text className="text-error-500">{creationError}</Text>
 
                 <Button
                     onPress={handleSubmit((data) => {
                         createTodoController.createTodo(
                             data.title,
-                            data.description
+                            data.description,
+                            tags
                         );
                         setWaitingForCreation(true);
                     })}
@@ -106,4 +135,4 @@ const TodoCreationForm = ({
     );
 };
 
-export default injectComponent(TodoCreationForm, TodoCreationGraph);
+export default injectComponent(TodoCreationForm, ControllerGraph);
