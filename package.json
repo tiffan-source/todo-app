@@ -62,7 +62,7 @@
         "todo-entity": "^2.0.0",
         "todo-entity-default": "^1.1.0",
         "todo-usecase": "^3.0.0",
-        "todo-usecase-default": "^1.6.1"
+        "todo-usecase-default": "^2.0.0"
     },
     "devDependencies": {
         "@babel/core": "^7.25.2",

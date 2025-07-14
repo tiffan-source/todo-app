@@ -1,21 +1,32 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ITodo, ITodoFactory } from "todo-entity";
+import { ILabelFactory, ITodo, ITodoFactory } from "todo-entity";
 import {
     GetUncompletedTodosRepositoryOutput,
     IGetUncompletedTodosRepository,
 } from "todo-usecase";
-import { TodoRepoSaveModel } from "@/infrastructure/async-storage/repositories/common/repository.model";
+import {
+    LabelRepoSaveModel,
+    TodoRepoSaveModel,
+} from "@/infrastructure/async-storage/repositories/common/repository.model";
 
 export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
     implements IGetUncompletedTodosRepository
 {
-    constructor(private readonly todoFactory: ITodoFactory) {}
+    constructor(
+        private readonly todoFactory: ITodoFactory,
+        private readonly labelFactory: ILabelFactory
+    ) {}
 
     async execute(): Promise<GetUncompletedTodosRepositoryOutput> {
         try {
-            const jsonData = await AsyncStorage.getItem("todos");
-            if (jsonData) {
-                const todos: TodoRepoSaveModel[] = JSON.parse(jsonData);
+            const jsonDataTodo = await AsyncStorage.getItem("todos");
+            const jsonDataLabel = await AsyncStorage.getItem("labels");
+
+            if (jsonDataTodo) {
+                const todos: TodoRepoSaveModel[] = JSON.parse(jsonDataTodo);
+                const labels: LabelRepoSaveModel[] = JSON.parse(
+                    jsonDataLabel || "[]"
+                );
                 let result: ITodo[] = [];
                 // Convert raw todos to domain model using the factory
                 todos.forEach((todo: TodoRepoSaveModel) => {
@@ -26,16 +37,29 @@ export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
                     if (todo.description) {
                         domainTodo.description = todo.description;
                     }
-                    if (!todo.doneDate) {
-                        result.push(domainTodo);
-                    }
-                });
 
+                    for (const labelId of todo.labels ?? []) {
+                        const label = labels.find(
+                            (label) => label.id === labelId
+                        );
+                        if (label) {
+                            const domainLabel = this.labelFactory.createWithId(
+                                label.id,
+                                label.name
+                            );
+                            domainLabel.setColor(label.color);
+                            domainTodo.addLabel(domainLabel);
+                        }
+                    }
+
+                    result.push(domainTodo);
+                });
                 return result;
             } else {
                 return [];
             }
         } catch (error) {
+            console.error("Error retrieving todos from storage:", error);
             throw new Error("Failed to retrieve todos from storage");
         }
     }
