@@ -31,6 +31,7 @@ export class SaveTodoAsyncStorageRepository implements ISaveTodoRepository {
                 title: todo.getTitle(),
                 description: todo.getDescription(),
                 doneDate: doneDate ? doneDate.toISOString() : undefined,
+                labels: todo.getLabels().map((label) => label.getId()),
             };
 
             // Save back to AsyncStorage

@@ -4,8 +4,10 @@ import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
 import {
     ICreateTodoInteractor,
     IGetUncompletedTodosInteractor,
+    IMarkTodoAsCompletedInteractor,
 } from "todo-usecase";
 import { InteractorGraph } from "./interactor.graph";
+import { CheckTodoController } from "@/back-for-front/todo-modification/controllers/mark-todo-as-completed.controller";
 
 @singleton()
 @graph({ subgraphs: [InteractorGraph] })
@@ -22,5 +24,10 @@ export class ControllerGraph extends ObjectGraph {
         return new GetAllUnaccomplishedTodoTodoController(
             getAllUnaccomplishedTodoUseCase
         );
+    }
+
+    @provides()
+    checkTodoController(checkTodoUseCase: IMarkTodoAsCompletedInteractor) {
+        return new CheckTodoController(checkTodoUseCase);
     }
 }

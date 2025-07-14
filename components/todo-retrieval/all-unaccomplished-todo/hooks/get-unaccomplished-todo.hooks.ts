@@ -13,7 +13,9 @@ let useGetAllUnaccomplishedTodoTodo = ({
     checkTodoPresenter,
 }: DependenciesOf<
     [ControllerGraph, PresenterGraph],
-    "getAllUnaccomplishedTodoController" | "getAllUnaccomplishedTodoPresenter"
+    | "getAllUnaccomplishedTodoController"
+    | "getAllUnaccomplishedTodoPresenter"
+    | "checkTodoPresenter"
 >) => {
     const [todos, setTodos] = useState<TodoTicketViewModel[]>([]);
 
@@ -25,8 +27,8 @@ let useGetAllUnaccomplishedTodoTodo = ({
                     setTodos(data);
                 }
             );
-
             checkTodoPresenter.setCallback((data: TodoCheckViewModel) => {
+                console.log("Todo checked:", data);
                 getAllUnaccomplishedTodoController.getAllTodos();
             });
         }, [])

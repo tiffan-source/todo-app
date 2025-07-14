@@ -10,11 +10,11 @@ import {
 import { CheckIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
 import { DependenciesOf, injectComponent } from "react-obsidian";
-import { TodoModificationGraph } from "@/main/todo-modification/todo-modificaton.graph";
+import { ControllerGraph } from "@/main/controller.graph";
 
 const AllUnaccomplishedTodo = ({
     checkTodoController,
-}: DependenciesOf<TodoModificationGraph, "checkTodoController">) => {
+}: DependenciesOf<ControllerGraph, "checkTodoController">) => {
     const { todos } = useGetAllTodo();
 
     return (
@@ -68,4 +68,4 @@ const AllUnaccomplishedTodo = ({
     );
 };
 
-export default injectComponent(AllUnaccomplishedTodo, TodoModificationGraph);
+export default injectComponent(AllUnaccomplishedTodo, ControllerGraph);

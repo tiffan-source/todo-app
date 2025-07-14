@@ -30,12 +30,15 @@ export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
                 let result: ITodo[] = [];
                 // Convert raw todos to domain model using the factory
                 todos.forEach((todo: TodoRepoSaveModel) => {
-                    const domainTodo = this.todoFactory.createWithId(
+                    if (todo.doneDate) {
+                        return; // Skip completed todos
+                    }
+                    const domainTodo: ITodo = this.todoFactory.createWithId(
                         todo.id,
                         todo.title
                     );
                     if (todo.description) {
-                        domainTodo.description = todo.description;
+                        domainTodo.describe(todo.description);
                     }
 
                     for (const labelId of todo.labels ?? []) {

@@ -16,21 +16,20 @@ export class GetTodoByIdAsyncStorageRepository
         input: GetTodoByIdRepositoryInput
     ): Promise<GetTodoByIdRepositoryOutput> {
         try {
-            console.log("Retrieving todo from AsyncStorage with ID:", input);
             const jsonData = await AsyncStorage.getItem("todos");
             if (jsonData) {
                 const todos: TodoRepoSaveModel[] = JSON.parse(jsonData);
                 const todo = todos.find((todo) => todo.id === input);
                 if (todo) {
-                    const domainTodo = this.todoFactory.createWithId(
+                    const domainTodo: ITodo = this.todoFactory.createWithId(
                         todo.id,
                         todo.title
                     );
                     if (todo.description) {
-                        domainTodo.description = todo.description;
+                        domainTodo.describe(todo.description);
                     }
                     if (todo.doneDate) {
-                        domainTodo.doneDate = todo.doneDate;
+                        domainTodo.accomplish(new Date(todo.doneDate));
                     }
                     return domainTodo;
                 }
