@@ -1,11 +1,14 @@
+import { TodoCheckViewModel } from "@/back-for-front/shared/view-models/TodoCheckViewModel";
 import { TodoCreatedViewModel } from "@/back-for-front/shared/view-models/TodoCreatedViewModel";
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
 import { CreateTodoPresenter } from "@/back-for-front/todo-creation/presenters/create-todo.presenter";
+import { MarkTodoAsCompletedPresenter } from "@/back-for-front/todo-modification/presenters/mark-todo-as-completed.presenter";
 import { GetAllUnaccomplishedTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-unaccomplishedTodo-todo.presenter";
 import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
 import {
     ICreateTodoPresenter,
     IGetUncompletedTodosPresenter,
+    IMarkTodoAsCompletedPresenter,
 } from "todo-usecase";
 
 @singleton()
@@ -21,5 +24,10 @@ export class PresenterGraph extends ObjectGraph {
     @provides()
     createTodoPresenter(): ICreateTodoPresenter<TodoCreatedViewModel> {
         return new CreateTodoPresenter();
+    }
+
+    @provides()
+    checkTodoPresenter(): IMarkTodoAsCompletedPresenter<TodoCheckViewModel> {
+        return new MarkTodoAsCompletedPresenter();
     }
 }

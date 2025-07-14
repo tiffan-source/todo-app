@@ -8,13 +8,19 @@ import {
     ICreateTodoRepository,
     ICreateTodoValidation,
     IGetLabelByIdRepository,
+    IGetTodoByIdRepository,
     IGetUncompletedTodosInteractor,
     IGetUncompletedTodosPresenter,
     IGetUncompletedTodosRepository,
+    IMarkTodoAsCompletedInteractor,
+    IMarkTodoAsCompletedPresenter,
+    IMarkTodoAsCompletedValidation,
+    ISaveTodoRepository,
 } from "todo-usecase";
 import {
     CreateTodoInteractor,
     GetUncompletedTodosInteractor,
+    MarkTodoAsCompletedInteractor,
 } from "todo-usecase-default";
 import { RepositoryGraph } from "./repository.graph";
 import { PresenterGraph } from "./presenter.graph";
@@ -57,6 +63,21 @@ export class InteractorGraph extends ObjectGraph {
             createTodoPresenter,
             todoFactory,
             labelFactory
+        );
+    }
+
+    @provides()
+    checkTodoUseCase(
+        markTodoValidator: IMarkTodoAsCompletedValidation,
+        getTodoByIdRepository: IGetTodoByIdRepository,
+        saveTodoRepository: ISaveTodoRepository,
+        checkTodoPresenter: IMarkTodoAsCompletedPresenter
+    ): IMarkTodoAsCompletedInteractor {
+        return new MarkTodoAsCompletedInteractor(
+            markTodoValidator,
+            getTodoByIdRepository,
+            saveTodoRepository,
+            checkTodoPresenter
         );
     }
 }
