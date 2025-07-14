@@ -14,6 +14,7 @@ export class CreateTodoAsyncStorageRepository implements ICreateTodoRepository {
             id: input.getId(),
             title: input.getTitle(),
             description: input.getDescription(),
+            labels: input.getLabels().map((label) => label.getId()),
         };
 
         let previousTodos: TodoRepoSaveModel[] = [];
@@ -22,7 +23,6 @@ export class CreateTodoAsyncStorageRepository implements ICreateTodoRepository {
             if (jsonData) {
                 previousTodos = JSON.parse(jsonData);
             }
-
             previousTodos.push(newTodo);
             await AsyncStorage.setItem("todos", JSON.stringify(previousTodos));
             return input;

@@ -1,19 +1,19 @@
 import { TodoCreatedViewModel } from "@/back-for-front/shared/view-models/TodoCreatedViewModel";
-import { TodoCreationGraph } from "@/main/todo-creation/todo-creation.graph";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
+import { useLabelInputHook } from "./label-input.hook";
+import { PresenterGraph } from "@/main/presenter.graph";
 
 let useCreateTodoForm = ({
     createTodoPresenter,
-}: DependenciesOf<TodoCreationGraph, "createTodoPresenter">) => {
+}: DependenciesOf<PresenterGraph, "createTodoPresenter">) => {
     const [creationError, setCreationError] = useState<string | undefined>(
         undefined
     );
     const [waitingForCreation, setWaitingForCreation] =
         useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
-
     const presenter = createTodoPresenter;
 
     useEffect(() => {
@@ -31,7 +31,7 @@ let useCreateTodoForm = ({
         if (success) {
             router.back();
         }
-    }, [success]);
+    }, [success, presenter]);
 
     return {
         creationError,
@@ -41,4 +41,4 @@ let useCreateTodoForm = ({
     };
 };
 
-export default injectHook(useCreateTodoForm, TodoCreationGraph);
+export default injectHook(useCreateTodoForm, PresenterGraph);

@@ -16,6 +16,7 @@ const AllUnaccomplishedTodo = ({
     checkTodoController,
 }: DependenciesOf<TodoModificationGraph, "checkTodoController">) => {
     const { todos } = useGetAllTodo();
+
     return (
         <FlatList
             className="p-4"
@@ -45,6 +46,21 @@ const AllUnaccomplishedTodo = ({
                             {item.title}
                         </Text>
                         <Text>{item.description}</Text>
+                        <View className="flex flex-row items-center gap-2 mt-2">
+                            {item.labels.map((label) => (
+                                <View
+                                    key={label.id}
+                                    className="px-2 py-1 rounded-full"
+                                    style={{
+                                        backgroundColor: label.color,
+                                    }}
+                                >
+                                    <Text className="font-semibold">
+                                        #{label.name}
+                                    </Text>
+                                </View>
+                            ))}
+                        </View>
                     </View>
                 </Card>
             )}

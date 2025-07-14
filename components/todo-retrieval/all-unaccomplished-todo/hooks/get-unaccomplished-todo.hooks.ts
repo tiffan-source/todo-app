@@ -1,8 +1,8 @@
 import { TodoCheckViewModel } from "@/back-for-front/shared/view-models/TodoCheckViewModel";
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
-import { GlobalGraph } from "@/main/global.graph";
-import { TodoModificationGraph } from "@/main/todo-modification/todo-modificaton.graph";
-import { TodoRetrievalGraph } from "@/main/todo-retrieval/todo-retrieval.graph";
+import { AppGraph } from "@/main/app.grah";
+import { ControllerGraph } from "@/main/controller.graph";
+import { PresenterGraph } from "@/main/presenter.graph";
 import { useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
@@ -12,10 +12,8 @@ let useGetAllUnaccomplishedTodoTodo = ({
     getAllUnaccomplishedTodoPresenter,
     checkTodoPresenter,
 }: DependenciesOf<
-    [GlobalGraph, TodoRetrievalGraph, TodoModificationGraph],
-    | "getAllUnaccomplishedTodoController"
-    | "getAllUnaccomplishedTodoPresenter"
-    | "checkTodoPresenter"
+    [ControllerGraph, PresenterGraph],
+    "getAllUnaccomplishedTodoController" | "getAllUnaccomplishedTodoPresenter"
 >) => {
     const [todos, setTodos] = useState<TodoTicketViewModel[]>([]);
 
@@ -39,4 +37,4 @@ let useGetAllUnaccomplishedTodoTodo = ({
     };
 };
 
-export default injectHook(useGetAllUnaccomplishedTodoTodo, GlobalGraph);
+export default injectHook(useGetAllUnaccomplishedTodoTodo, AppGraph);

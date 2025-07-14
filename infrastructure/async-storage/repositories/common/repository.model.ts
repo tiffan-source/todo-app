@@ -3,4 +3,11 @@ export type TodoRepoSaveModel = {
     title: string;
     doneDate?: string;
     description?: string;
+    labels?: string[];
+};
+
+export type LabelRepoSaveModel = {
+    id: string;
+    name: string;
+    color: string;
 };
