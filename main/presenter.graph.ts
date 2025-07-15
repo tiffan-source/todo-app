@@ -1,3 +1,5 @@
+import { GetAllLabelPresenter } from "@/back-for-front/label-retrieval/presenters/get-all-label.presenter";
+import { LabelViewModel } from "@/back-for-front/shared/view-models/LabelViewModel";
 import { TodoCheckViewModel } from "@/back-for-front/shared/view-models/TodoCheckViewModel";
 import { TodoCreatedViewModel } from "@/back-for-front/shared/view-models/TodoCreatedViewModel";
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
@@ -7,6 +9,7 @@ import { GetAllUnaccomplishedTodoPresenter } from "@/back-for-front/todo-retriev
 import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
 import {
     ICreateTodoPresenter,
+    IGetAllLabelPresenter,
     IGetUncompletedTodosPresenter,
     IMarkTodoAsCompletedPresenter,
 } from "todo-usecase";
@@ -29,5 +32,10 @@ export class PresenterGraph extends ObjectGraph {
     @provides()
     checkTodoPresenter(): IMarkTodoAsCompletedPresenter<TodoCheckViewModel> {
         return new MarkTodoAsCompletedPresenter();
+    }
+
+    @provides()
+    getAllLabelPresenter(): IGetAllLabelPresenter<LabelViewModel[]> {
+        return new GetAllLabelPresenter();
     }
 }

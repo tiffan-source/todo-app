@@ -6,10 +6,16 @@ export class CreateTodoController {
     createTodo = (
         title: string,
         description?: string,
+        labelIds?: string[],
         labelTitles?: string[]
     ) => {
         this.createTodoUseCase.execute({
-            input: { title, description, newLabelTitles: labelTitles },
+            input: {
+                title,
+                description,
+                newLabelTitles: labelTitles,
+                labelIds,
+            },
             timestamp: new Date().toISOString(),
         });
     };

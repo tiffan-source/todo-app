@@ -3,11 +3,13 @@ import { GetAllUnaccomplishedTodoTodoController } from "@/back-for-front/todo-re
 import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
 import {
     ICreateTodoInteractor,
+    IGetAllLabelInteractor,
     IGetUncompletedTodosInteractor,
     IMarkTodoAsCompletedInteractor,
 } from "todo-usecase";
 import { InteractorGraph } from "./interactor.graph";
 import { CheckTodoController } from "@/back-for-front/todo-modification/controllers/mark-todo-as-completed.controller";
+import { GetAllLabelController } from "@/back-for-front/label-retrieval/controllers/get-all-label.controller";
 
 @singleton()
 @graph({ subgraphs: [InteractorGraph] })
@@ -29,5 +31,10 @@ export class ControllerGraph extends ObjectGraph {
     @provides()
     checkTodoController(checkTodoUseCase: IMarkTodoAsCompletedInteractor) {
         return new CheckTodoController(checkTodoUseCase);
+    }
+
+    @provides()
+    getAllLabelController(getAllLabelUseCase: IGetAllLabelInteractor) {
+        return new GetAllLabelController(getAllLabelUseCase);
     }
 }

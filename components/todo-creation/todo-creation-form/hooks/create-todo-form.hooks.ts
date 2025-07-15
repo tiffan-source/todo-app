@@ -2,7 +2,6 @@ import { TodoCreatedViewModel } from "@/back-for-front/shared/view-models/TodoCr
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
-import { useLabelInputHook } from "./label-input.hook";
 import { PresenterGraph } from "@/main/presenter.graph";
 
 let useCreateTodoForm = ({

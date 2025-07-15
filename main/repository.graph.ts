@@ -6,6 +6,7 @@ import {
     ICheckLabelExistRepository,
     ICreateLabelRepository,
     ICreateTodoRepository,
+    IGetAllLabelRepository,
     IGetLabelByIdRepository,
     IGetTodoByIdRepository,
     IGetUncompletedTodosRepository,
@@ -17,6 +18,7 @@ import { CheckLabelExistAsyncStorageRepository } from "@/infrastructure/async-st
 import { GetLabelByIdAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/label-retrieval/get-label-by-id.async-storage.repository";
 import { GetTodoByIdAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-retrieval/get-todo-by-id.async-storage.repository";
 import { SaveTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/common/save-todo.async-storage.repository";
+import { GetAllLabelAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/label-retrieval/get-all-label.async-storage.repository";
 
 @singleton()
 @graph({
@@ -64,5 +66,10 @@ export class RepositoryGraph extends ObjectGraph {
     @provides()
     saveTodoRepository(): ISaveTodoRepository {
         return new SaveTodoAsyncStorageRepository();
+    }
+
+    @provides()
+    getAllLabelRepository(labelFactory: ILabelFactory): IGetAllLabelRepository {
+        return new GetAllLabelAsyncStorageRepository(labelFactory);
     }
 }

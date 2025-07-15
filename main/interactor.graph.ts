@@ -7,6 +7,9 @@ import {
     ICreateTodoPresenter,
     ICreateTodoRepository,
     ICreateTodoValidation,
+    IGetAllLabelInteractor,
+    IGetAllLabelPresenter,
+    IGetAllLabelRepository,
     IGetLabelByIdRepository,
     IGetTodoByIdRepository,
     IGetUncompletedTodosInteractor,
@@ -19,6 +22,7 @@ import {
 } from "todo-usecase";
 import {
     CreateTodoInteractor,
+    GetAllLabelInteractor,
     GetUncompletedTodosInteractor,
     MarkTodoAsCompletedInteractor,
 } from "todo-usecase-default";
@@ -78,6 +82,17 @@ export class InteractorGraph extends ObjectGraph {
             getTodoByIdRepository,
             saveTodoRepository,
             checkTodoPresenter
+        );
+    }
+
+    @provides()
+    getAllLabelUseCase(
+        getAllLabelRepository: IGetAllLabelRepository,
+        getAllLabelPresenter: IGetAllLabelPresenter
+    ): IGetAllLabelInteractor {
+        return new GetAllLabelInteractor(
+            getAllLabelRepository,
+            getAllLabelPresenter
         );
     }
 }

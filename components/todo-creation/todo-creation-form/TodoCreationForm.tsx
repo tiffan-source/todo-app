@@ -15,8 +15,9 @@ import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { DependenciesOf, injectComponent } from "react-obsidian";
 import useTodoCreationForm from "./hooks/create-todo-form.hooks";
 import { Text } from "@/components/ui/text";
-import { useLabelInputHook } from "./hooks/label-input.hook";
+import useLabelInputHook from "./hooks/label-input.hook";
 import { ControllerGraph } from "@/main/controller.graph";
+import InputSuggestion from "@/components/common/input-suggestion/InputSuggestion";
 
 type TodoCreationForms = {
     title: string;
@@ -40,8 +41,14 @@ const TodoCreationForm = ({
     const { creationError, waitingForCreation, setWaitingForCreation } =
         useTodoCreationForm();
 
-    const { handleLabelTypingInput, tags, label, removeTagOnPress } =
-        useLabelInputHook();
+    const {
+        handleLabelTypingInput,
+        tags,
+        label,
+        removeTagOnPress,
+        labelSuggestions,
+        handleSelectSuggestion,
+    } = useLabelInputHook();
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -92,28 +99,27 @@ const TodoCreationForm = ({
                     )}
                 />
 
-                <Box className="flex-row flex-wrap gap-2 mb-4">
+                <Box className="flex-row flex-wrap gap-2 mb-2">
                     {tags.map((tag, index) => (
                         <Text
                             onPress={() => removeTagOnPress(index)}
                             key={index}
                             className="text-primary-950 font-semibold"
                         >
-                            #{tag}
+                            #{tag.name}
                         </Text>
                     ))}
                 </Box>
 
-                <Input
-                    variant="underlined"
-                    className="flex-row gap-2 flex-wrap"
-                >
-                    <InputField
-                        onChangeText={handleLabelTypingInput}
-                        value={label}
-                        placeholder="#Tags"
-                    />
-                </Input>
+                <InputSuggestion
+                    onChange={handleLabelTypingInput}
+                    suggestions={labelSuggestions.map((s) => ({
+                        value: s.id,
+                        label: s.name,
+                    }))}
+                    value={label}
+                    onSelectSuggestion={handleSelectSuggestion}
+                />
 
                 <Text className="text-error-500">{creationError}</Text>
 
@@ -123,6 +129,9 @@ const TodoCreationForm = ({
                             data.title,
                             data.description,
                             tags
+                                .filter((tag) => tag.id)
+                                .map((tag) => tag.id as string),
+                            tags.filter((tag) => !tag.id).map((tag) => tag.name)
                         );
                         setWaitingForCreation(true);
                     })}
