@@ -28,6 +28,11 @@ export class GetAllUnaccomplishedTodoPresenter
                                 color: label.color || "",
                             }))
                           : [],
+                      dueDate: todo.dueDate
+                          ? todo.dueDate.getDate() +
+                            "/" +
+                            todo.dueDate.getMonth()
+                          : "",
                   }))
         );
     }

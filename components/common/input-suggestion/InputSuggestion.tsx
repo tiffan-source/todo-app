@@ -14,6 +14,7 @@ type InputSuggestionProps = {
     suggestions: InputSuggestion[];
     value: string;
     onSelectSuggestion?: (suggestion: InputSuggestion) => void;
+    placeholder?: string;
 };
 
 const InputSuggestion = ({
@@ -21,17 +22,19 @@ const InputSuggestion = ({
     suggestions,
     value,
     onSelectSuggestion,
+    placeholder,
 }: InputSuggestionProps) => {
     const [suggestionActive, setSuggestionActive] = useState(false);
 
     return (
-        <Box>
+        <Box className="mb-4">
             <Input variant="underlined">
                 <InputField
                     onChangeText={onChange}
                     value={value}
                     onBlur={() => setSuggestionActive(false)}
                     onFocus={() => setSuggestionActive(true)}
+                    placeholder={placeholder}
                 />
             </Input>
             {suggestionActive && suggestions.length > 0 && (

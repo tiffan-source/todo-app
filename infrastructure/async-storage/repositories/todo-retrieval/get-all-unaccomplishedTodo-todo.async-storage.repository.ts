@@ -55,6 +55,10 @@ export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
                         }
                     }
 
+                    if (todo.dueDate) {
+                        domainTodo.addDeadline(new Date(todo.dueDate));
+                    }
+
                     result.push(domainTodo);
                 });
                 return result;

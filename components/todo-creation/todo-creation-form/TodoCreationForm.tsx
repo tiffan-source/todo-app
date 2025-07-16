@@ -6,8 +6,8 @@ import {
     FormControlErrorIcon,
     FormControlErrorText,
 } from "@/components/ui/form-control";
-import { AlertCircleIcon } from "@/components/ui/icon";
-import { Input, InputField } from "@/components/ui/input";
+import { AlertCircleIcon, CalendarDaysIcon, Icon } from "@/components/ui/icon";
+import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -18,6 +18,9 @@ import { Text } from "@/components/ui/text";
 import useLabelInputHook from "./hooks/label-input.hook";
 import { ControllerGraph } from "@/main/controller.graph";
 import InputSuggestion from "@/components/common/input-suggestion/InputSuggestion";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { useDateHook } from "./hooks/date.hook";
+import { Switch } from "@/components/ui/switch";
 
 type TodoCreationForms = {
     title: string;
@@ -49,6 +52,8 @@ const TodoCreationForm = ({
         labelSuggestions,
         handleSelectSuggestion,
     } = useLabelInputHook();
+
+    const { date, setDate } = useDateHook();
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -119,7 +124,42 @@ const TodoCreationForm = ({
                     }))}
                     value={label}
                     onSelectSuggestion={handleSelectSuggestion}
+                    placeholder="Add tags (e.g. #work, #urgent)"
                 />
+
+                <Box className="flex-row justify-between items-center gap-2">
+                    <Box className="flex-row items-center">
+                        <Icon
+                            as={CalendarDaysIcon}
+                            size="xl"
+                        />
+                        <Box>
+                            {date && (
+                                <DateTimePicker
+                                    value={date}
+                                    mode="date"
+                                    display="default"
+                                    minimumDate={new Date()}
+                                    onChange={(event, date) => {
+                                        if (date) {
+                                            setDate(date);
+                                        }
+                                    }}
+                                />
+                            )}
+                        </Box>
+                    </Box>
+                    <Box>
+                        <Switch
+                            size="md"
+                            isDisabled={false}
+                            value={date !== undefined}
+                            onToggle={() => {
+                                setDate(date ? undefined : new Date());
+                            }}
+                        />
+                    </Box>
+                </Box>
 
                 <Text className="text-error-500">{creationError}</Text>
 
@@ -131,7 +171,10 @@ const TodoCreationForm = ({
                             tags
                                 .filter((tag) => tag.id)
                                 .map((tag) => tag.id as string),
-                            tags.filter((tag) => !tag.id).map((tag) => tag.name)
+                            tags
+                                .filter((tag) => !tag.id)
+                                .map((tag) => tag.name),
+                            date
                         );
                         setWaitingForCreation(true);
                     })}

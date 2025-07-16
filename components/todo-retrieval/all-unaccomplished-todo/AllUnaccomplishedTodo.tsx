@@ -61,6 +61,7 @@ const AllUnaccomplishedTodo = ({
                                 </View>
                             ))}
                         </View>
+                        {item.dueDate && <Text>{item.dueDate}</Text>}
                     </View>
                 </Card>
             )}
