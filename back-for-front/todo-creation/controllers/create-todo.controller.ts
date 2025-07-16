@@ -7,7 +7,8 @@ export class CreateTodoController {
         title: string,
         description?: string,
         labelIds?: string[],
-        labelTitles?: string[]
+        labelTitles?: string[],
+        dueDate?: Date
     ) => {
         this.createTodoUseCase.execute({
             input: {
@@ -15,6 +16,7 @@ export class CreateTodoController {
                 description,
                 newLabelTitles: labelTitles,
                 labelIds,
+                dueDate,
             },
             timestamp: new Date().toISOString(),
         });

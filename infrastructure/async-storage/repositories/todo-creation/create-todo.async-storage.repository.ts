@@ -15,6 +15,7 @@ export class CreateTodoAsyncStorageRepository implements ICreateTodoRepository {
             title: input.getTitle(),
             description: input.getDescription(),
             labels: input.getLabels().map((label) => label.getId()),
+            dueDate: input.getDueDate()?.toISOString(),
         };
 
         let previousTodos: TodoRepoSaveModel[] = [];

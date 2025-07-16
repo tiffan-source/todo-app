@@ -4,6 +4,7 @@ export type TodoRepoSaveModel = {
     doneDate?: string;
     description?: string;
     labels?: string[];
+    dueDate?: string;
 };
 
 export type LabelRepoSaveModel = {

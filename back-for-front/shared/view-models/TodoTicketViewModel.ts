@@ -8,4 +8,5 @@ export interface TodoTicketViewModel {
         name: string;
         color: string;
     }[];
+    dueDate?: string;
 }
