@@ -6,7 +6,15 @@ import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 export default function RootLayout() {
     return (
         <GluestackUIProvider mode="system">
-            <Stack screenOptions={{ headerShown: false }}>
+            <Stack
+                screenOptions={{
+                    headerStyle: {
+                        backgroundColor: "#f2f1f1",
+                    },
+                    headerShadowVisible: false,
+                    headerTitle: "",
+                }}
+            >
                 <Stack.Screen name="index" />
                 <Stack.Screen
                     name="create-todo"
