@@ -2,22 +2,22 @@ import { LabelViewModel } from "@/back-for-front/shared/view-models/LabelViewMod
 import { AppGraph } from "@/main/app.grah";
 import { ControllerGraph } from "@/main/controller.graph";
 import { PresenterGraph } from "@/main/presenter.graph";
+import { useLabelStore } from "@/store/label.store";
 import { useEffect, useState } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
 const useLabelInputHook = ({
     getAllLabelController,
-    getAllLabelPresenter,
 }: DependenciesOf<
     [ControllerGraph, PresenterGraph],
-    "getAllLabelController" | "getAllLabelPresenter"
+    "getAllLabelController"
 >) => {
     const [label, setLabel] = useState<string>("");
     const [tags, setTags] = useState<{ id?: string; name: string }[]>([]);
-    const [allLabels, setAllLabels] = useState<LabelViewModel[]>([]);
     const [labelSuggestions, setLabelSuggestions] = useState<LabelViewModel[]>(
         []
     );
+    const allLabels = useLabelStore((state) => state.labels);
 
     const handleLabelTypingInput = (text: string) => {
         setLabel(text);
@@ -59,9 +59,6 @@ const useLabelInputHook = ({
 
     useEffect(() => {
         getAllLabelController.getAllLabels();
-        getAllLabelPresenter.setCallback((data: LabelViewModel[]) => {
-            setAllLabels(data);
-        });
     }, []);
 
     return {

@@ -13,7 +13,7 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { DependenciesOf, injectComponent } from "react-obsidian";
-import useTodoCreationForm from "./hooks/create-todo-form.hooks";
+import { useCreateTodoForm } from "./hooks/create-todo-form.hooks";
 import { Text } from "@/components/ui/text";
 import useLabelInputHook from "./hooks/label-input.hook";
 import { ControllerGraph } from "@/main/controller.graph";
@@ -41,8 +41,12 @@ const TodoCreationForm = ({
         },
     });
 
-    const { creationError, waitingForCreation, setWaitingForCreation } =
-        useTodoCreationForm();
+    const {
+        creationError,
+        waitingForCreation,
+        setWaitingForCreation,
+        resetTodoCreation,
+    } = useCreateTodoForm();
 
     const {
         handleLabelTypingInput,
@@ -165,6 +169,7 @@ const TodoCreationForm = ({
 
                 <Button
                     onPress={handleSubmit((data) => {
+                        resetTodoCreation();
                         createTodoController.createTodo(
                             data.title,
                             data.description,

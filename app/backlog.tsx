@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import React from "react";
-import AllUnaccomplishedTodo from "@/components/todo-retrieval/all-unaccomplished-todo/AllUnaccomplishedTodo";
+import AllUnaccomplishedTodo from "@/components/backlog/all-unaccomplished-todo/AllUnaccomplishedTodo";
 
 const Backlog = () => {
     return (
