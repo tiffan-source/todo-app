@@ -7,9 +7,9 @@ export let useCreateTodoForm = () => {
         let sub = useTodoCreateStore.subscribe(
             (state) => state.todo.success,
             (success) => {
-                if (success == true) {
+                if (success === true) {
                     router.back();
-                } else if (success == false) {
+                } else if (success === false) {
                     setWaitingForCreation(false);
                 }
             }

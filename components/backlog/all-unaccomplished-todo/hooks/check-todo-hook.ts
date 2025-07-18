@@ -1,6 +1,5 @@
 import { ControllerGraph } from "@/main/controller.graph";
 import { useTodoCheckStore } from "@/store/todo-check.store";
-import { router } from "expo-router";
 import { useEffect } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 

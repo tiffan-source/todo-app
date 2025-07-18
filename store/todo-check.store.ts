@@ -11,7 +11,7 @@ interface TodoCheckStore {
 export const useTodoCheckStore = create<TodoCheckStore>()(
     subscribeWithSelector((set) => ({
         todoCheck: {},
-        setTodoCheck: (todoCheck) => set({ todoCheck: todoCheck }),
+        setTodoCheck: (todoCheck) => set({ todoCheck }),
         reset: () => set({ todoCheck: {} }),
     }))
 );
