@@ -11,15 +11,15 @@ import { Text } from "@/components/ui/text";
 import { DependenciesOf, injectComponent } from "react-obsidian";
 import { ControllerGraph } from "@/main/controller.graph";
 import { useTodoStore } from "@/store/todo.store";
-import useCheckTodo from "./hooks/check-todo-hook";
-import useGetAllUnaccomplishedTodoTodo from "./hooks/get-unaccomplished-todo.hooks";
+import useEffectCheckTodo from "./hooks/check-todo-hook";
+import useEffectGetAllUnaccomplishedTodo from "./hooks/get-unaccomplished-todo.hooks";
 
 const AllUnaccomplishedTodo = ({
     checkTodoController,
 }: DependenciesOf<ControllerGraph, "checkTodoController">) => {
     const todos = useTodoStore((state) => state.todos);
-    useCheckTodo();
-    useGetAllUnaccomplishedTodoTodo();
+    useEffectCheckTodo();
+    useEffectGetAllUnaccomplishedTodo();
 
     return (
         <FlatList

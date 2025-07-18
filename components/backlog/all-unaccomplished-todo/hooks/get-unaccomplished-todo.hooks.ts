@@ -3,7 +3,7 @@ import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
-const useGetAllUnaccomplishedTodoTodo = ({
+const useEffectGetAllUnaccomplishedTodo = ({
     getAllUnaccomplishedTodoController,
 }: DependenciesOf<[ControllerGraph], "getAllUnaccomplishedTodoController">) => {
     useFocusEffect(
@@ -13,4 +13,4 @@ const useGetAllUnaccomplishedTodoTodo = ({
     );
 };
 
-export default injectHook(useGetAllUnaccomplishedTodoTodo, ControllerGraph);
+export default injectHook(useEffectGetAllUnaccomplishedTodo, ControllerGraph);

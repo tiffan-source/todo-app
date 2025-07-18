@@ -17,7 +17,6 @@ export let useCreateTodoForm = () => {
 
         return () => {
             sub();
-            console.log("Unsubscribed from todo creation success");
         };
     }, []);
 

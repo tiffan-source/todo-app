@@ -4,22 +4,20 @@ import { router } from "expo-router";
 import { useEffect } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
-const useCheckTodo = ({
+const useEffectCheckTodo = ({
     getAllUnaccomplishedTodoController,
 }: DependenciesOf<[ControllerGraph], "getAllUnaccomplishedTodoController">) => {
     useEffect(() => {
         let sub = useTodoCheckStore.subscribe(
-            (store) => store.todoChecks.todoId,
+            (store) => store.todoCheck.todoId,
             (todoId) => {
-                console.log("Todo checks success:", todoId);
                 getAllUnaccomplishedTodoController.getAllTodos();
             }
         );
         return () => {
             sub();
-            console.log("Unsubscribed from todo checks success");
         };
     }, []);
 };
 
-export default injectHook(useCheckTodo, ControllerGraph);
+export default injectHook(useEffectCheckTodo, ControllerGraph);
