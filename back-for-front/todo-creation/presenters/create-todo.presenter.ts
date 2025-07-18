@@ -5,20 +5,16 @@ import {
     outputDto,
 } from "todo-usecase";
 
-export class CreateTodoPresenter
-    implements ICreateTodoPresenter<TodoCreatedViewModel>
-{
-    private onPresent?: (output: TodoCreatedViewModel) => void;
+export class CreateTodoPresenter implements ICreateTodoPresenter {
+    constructor(
+        private readonly consumer: (viewModels: TodoCreatedViewModel) => void
+    ) {}
 
     present(output: outputDto<CreateTodoOutput>): void {
-        this.onPresent?.(
+        this.consumer?.(
             output.error
                 ? { success: false, errorMessage: output.error[0].message }
                 : { success: true, errorMessage: "" }
         );
-    }
-
-    setCallback(onPresent: (output: TodoCreatedViewModel) => void): void {
-        this.onPresent = onPresent;
     }
 }

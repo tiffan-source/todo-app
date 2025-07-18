@@ -1,4 +1,4 @@
 export interface TodoCreatedViewModel {
-    success: boolean;
+    success?: boolean;
     errorMessage?: string;
 }

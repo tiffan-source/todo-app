@@ -6,6 +6,10 @@ import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTic
 import { CreateTodoPresenter } from "@/back-for-front/todo-creation/presenters/create-todo.presenter";
 import { MarkTodoAsCompletedPresenter } from "@/back-for-front/todo-modification/presenters/mark-todo-as-completed.presenter";
 import { GetAllUnaccomplishedTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-unaccomplishedTodo-todo.presenter";
+import { useLabelStore } from "@/store/label.store";
+import { useTodoCheckStore } from "@/store/todo-check.store";
+import { useTodoCreateStore } from "@/store/todo-create.store";
+import { useTodoStore } from "@/store/todo.store";
 import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
 import {
     ICreateTodoPresenter,
@@ -18,24 +22,28 @@ import {
 @graph()
 export class PresenterGraph extends ObjectGraph {
     @provides()
-    getAllUnaccomplishedTodoPresenter(): IGetUncompletedTodosPresenter<
-        TodoTicketViewModel[]
-    > {
-        return new GetAllUnaccomplishedTodoPresenter();
+    getAllUnaccomplishedTodoPresenter(): IGetUncompletedTodosPresenter {
+        return new GetAllUnaccomplishedTodoPresenter(
+            useTodoStore.getState().setTodos
+        );
     }
 
     @provides()
-    createTodoPresenter(): ICreateTodoPresenter<TodoCreatedViewModel> {
-        return new CreateTodoPresenter();
+    createTodoPresenter(): ICreateTodoPresenter {
+        return new CreateTodoPresenter(
+            useTodoCreateStore.getState().setTodoCreate
+        );
     }
 
     @provides()
-    checkTodoPresenter(): IMarkTodoAsCompletedPresenter<TodoCheckViewModel> {
-        return new MarkTodoAsCompletedPresenter();
+    checkTodoPresenter(): IMarkTodoAsCompletedPresenter {
+        return new MarkTodoAsCompletedPresenter(
+            useTodoCheckStore.getState().setTodoCheck
+        );
     }
 
     @provides()
-    getAllLabelPresenter(): IGetAllLabelPresenter<LabelViewModel[]> {
-        return new GetAllLabelPresenter();
+    getAllLabelPresenter(): IGetAllLabelPresenter {
+        return new GetAllLabelPresenter(useLabelStore.getState().setLabels);
     }
 }
