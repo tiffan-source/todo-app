@@ -5,13 +5,13 @@ import {
     outputDto,
 } from "todo-usecase";
 
-export class GetAllLabelPresenter
-    implements IGetAllLabelPresenter<LabelViewModel[]>
-{
-    private callback?: (data: LabelViewModel[]) => void;
+export class GetAllLabelPresenter implements IGetAllLabelPresenter {
+    constructor(
+        private readonly consumer: (viewModels: LabelViewModel[]) => void
+    ) {}
 
     present(output: outputDto<GetAllLabelOutput>): void {
-        this.callback?.(
+        this.consumer?.(
             output.result === undefined
                 ? []
                 : output.result.map((label) => ({
@@ -20,9 +20,5 @@ export class GetAllLabelPresenter
                       color: label.color || "",
                   }))
         );
-    }
-
-    setCallback(callback: (output: LabelViewModel[]) => void): void {
-        this.callback = callback;
     }
 }

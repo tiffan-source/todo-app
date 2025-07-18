@@ -1,10 +1,10 @@
-import AddTodoButton from "@/components/todo-creation/add-todo-button/AddTodoButton";
+import AddTodoButton from "@/components/create-todo/add-todo-button/AddTodoButton";
 import { Box } from "@/components/ui/box";
-import { Pressable } from "react-native";
-import { CalendarDaysIcon, DownloadIcon, Icon } from "@/components/ui/icon";
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
+import { CalendarDaysIcon, DownloadIcon, Icon } from "@/components/ui/icon";
 import { Link } from "expo-router";
+import { Pressable } from "react-native";
 
 export default function Index() {
     return (

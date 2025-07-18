@@ -20,6 +20,7 @@ export default function RootLayout() {
                     name="create-todo"
                     options={{
                         presentation: "modal",
+                        headerShown: false,
                     }}
                 />
             </Stack>

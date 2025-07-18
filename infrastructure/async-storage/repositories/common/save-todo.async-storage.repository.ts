@@ -12,7 +12,6 @@ export class SaveTodoAsyncStorageRepository implements ISaveTodoRepository {
         todo: SaveTodoRepositoryInput
     ): Promise<SaveTodoRepositoryOutput> {
         try {
-            console.log("Saving todo to AsyncStorage:", todo);
             const jsonData = await AsyncStorage.getItem("todos");
             let todos: TodoRepoSaveModel[] = jsonData
                 ? JSON.parse(jsonData)

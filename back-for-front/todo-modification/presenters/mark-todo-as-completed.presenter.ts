@@ -6,9 +6,11 @@ import {
 } from "todo-usecase";
 
 export class MarkTodoAsCompletedPresenter
-    implements IMarkTodoAsCompletedPresenter<TodoCheckViewModel>
+    implements IMarkTodoAsCompletedPresenter
 {
-    private callback?: (output: TodoCheckViewModel) => void;
+    constructor(
+        private readonly consumer: (viewModels: TodoCheckViewModel) => void
+    ) {}
 
     present(output: outputDto<MarkTodoAsCompletedOutput>): void {
         // Implementation of the present method
@@ -18,7 +20,7 @@ export class MarkTodoAsCompletedPresenter
                 success: true,
                 todoId: output.result.todoId,
             };
-            this.callback?.(viewModel);
+            this.consumer(viewModel);
         } else {
             const viewModel: TodoCheckViewModel = {
                 success: false,
@@ -26,13 +28,7 @@ export class MarkTodoAsCompletedPresenter
                     ? output.error[0].message
                     : "An error occurred",
             };
-            this.callback?.(viewModel);
+            this.consumer(viewModel);
         }
-    }
-
-    setCallback(callback: (output: TodoCheckViewModel) => void): void {
-        // Implementation of the setCallback method
-        // This method will set a callback to be called with the output
-        this.callback = callback;
     }
 }

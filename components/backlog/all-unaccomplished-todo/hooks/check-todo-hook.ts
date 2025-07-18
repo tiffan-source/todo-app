@@ -1,0 +1,22 @@
+import { ControllerGraph } from "@/main/controller.graph";
+import { useTodoCheckStore } from "@/store/todo-check.store";
+import { useEffect } from "react";
+import { DependenciesOf, injectHook } from "react-obsidian";
+
+const useEffectCheckTodo = ({
+    getAllUnaccomplishedTodoController,
+}: DependenciesOf<[ControllerGraph], "getAllUnaccomplishedTodoController">) => {
+    useEffect(() => {
+        let sub = useTodoCheckStore.subscribe(
+            (store) => store.todoCheck.todoId,
+            (todoId) => {
+                getAllUnaccomplishedTodoController.getAllTodos();
+            }
+        );
+        return () => {
+            sub();
+        };
+    }, []);
+};
+
+export default injectHook(useEffectCheckTodo, ControllerGraph);

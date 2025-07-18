@@ -8,12 +8,14 @@ import {
 } from "todo-usecase";
 
 export class GetAllUnaccomplishedTodoPresenter
-    implements IGetUncompletedTodosPresenter<TodoTicketViewModel[]>
+    implements IGetUncompletedTodosPresenter
 {
-    private callback?: (data: TodoTicketViewModel[]) => void;
+    constructor(
+        private readonly consumer: (viewModels: TodoTicketViewModel[]) => void
+    ) {}
 
     present(output: outputDto<GetUncompletedTodosOutput>): void {
-        this.callback?.(
+        this.consumer?.(
             output.result === undefined
                 ? []
                 : output.result.map((todo) => ({
@@ -35,9 +37,5 @@ export class GetAllUnaccomplishedTodoPresenter
                           : "",
                   }))
         );
-    }
-
-    setCallback(callback: (data: TodoTicketViewModel[]) => void): void {
-        this.callback = callback;
     }
 }
