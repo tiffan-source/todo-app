@@ -5,7 +5,7 @@ import { TodoCreatedViewModel } from "@/back-for-front/shared/view-models/TodoCr
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
 import { CreateTodoPresenter } from "@/back-for-front/todo-creation/presenters/create-todo.presenter";
 import { MarkTodoAsCompletedPresenter } from "@/back-for-front/todo-modification/presenters/mark-todo-as-completed.presenter";
-import { GetAllUnaccomplishedTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-unaccomplishedTodo-todo.presenter";
+import { GetAllTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-todo.presenter";
 import { useLabelStore } from "@/store/label.store";
 import { useTodoCheckStore } from "@/store/todo-check.store";
 import { useTodoCreateStore } from "@/store/todo-create.store";
@@ -14,7 +14,7 @@ import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
 import {
     ICreateTodoPresenter,
     IGetAllLabelPresenter,
-    IGetUncompletedTodosPresenter,
+    IGetAllTodoPresenter,
     IMarkTodoAsCompletedPresenter,
 } from "todo-usecase";
 
@@ -22,10 +22,8 @@ import {
 @graph()
 export class PresenterGraph extends ObjectGraph {
     @provides()
-    getAllUnaccomplishedTodoPresenter(): IGetUncompletedTodosPresenter {
-        return new GetAllUnaccomplishedTodoPresenter(
-            useTodoStore.getState().setTodos
-        );
+    getAllTodoPresenter(): IGetAllTodoPresenter {
+        return new GetAllTodoPresenter(useTodoStore.getState().setTodos);
     }
 
     @provides()

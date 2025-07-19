@@ -1,5 +1,4 @@
 import { CreateTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-creation/create-todo.async-storage.repository";
-import { GetAllUnaccomplishedTodoTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-retrieval/get-all-unaccomplishedTodo-todo.async-storage.repository";
 import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
 import { ILabelFactory, ITodoFactory } from "todo-entity";
 import {
@@ -7,9 +6,9 @@ import {
     ICreateLabelRepository,
     ICreateTodoRepository,
     IGetAllLabelRepository,
+    IGetAllTodoRepository,
     IGetLabelByIdRepository,
     IGetTodoByIdRepository,
-    IGetUncompletedTodosRepository,
     ISaveTodoRepository,
 } from "todo-usecase";
 import { EntityGraph } from "./entity.graph";
@@ -19,6 +18,7 @@ import { GetLabelByIdAsyncStorageRepository } from "@/infrastructure/async-stora
 import { GetTodoByIdAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-retrieval/get-todo-by-id.async-storage.repository";
 import { SaveTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/common/save-todo.async-storage.repository";
 import { GetAllLabelAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/label-retrieval/get-all-label.async-storage.repository";
+import { GetAllTodoAsyncStorageRepository } from "@/infrastructure/async-storage/repositories/todo-retrieval/get-all-todo.async-storage.repository";
 
 @singleton()
 @graph({
@@ -26,14 +26,11 @@ import { GetAllLabelAsyncStorageRepository } from "@/infrastructure/async-storag
 })
 export class RepositoryGraph extends ObjectGraph {
     @provides()
-    getAllUnaccomplishedTodoRepository(
+    getAllTodoRepository(
         todoFactory: ITodoFactory,
         labelFactory: ILabelFactory
-    ): IGetUncompletedTodosRepository {
-        return new GetAllUnaccomplishedTodoTodoAsyncStorageRepository(
-            todoFactory,
-            labelFactory
-        );
+    ): IGetAllTodoRepository {
+        return new GetAllTodoAsyncStorageRepository(todoFactory, labelFactory);
     }
 
     @provides()

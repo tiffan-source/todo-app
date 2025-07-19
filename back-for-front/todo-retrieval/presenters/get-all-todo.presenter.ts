@@ -1,20 +1,16 @@
 import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
 import {
     GetAllTodoOutput,
-    GetUncompletedTodosOutput,
     IGetAllTodoPresenter,
-    IGetUncompletedTodosPresenter,
     outputDto,
 } from "todo-usecase";
 
-export class GetAllUnaccomplishedTodoPresenter
-    implements IGetUncompletedTodosPresenter
-{
+export class GetAllTodoPresenter implements IGetAllTodoPresenter {
     constructor(
         private readonly consumer: (viewModels: TodoTicketViewModel[]) => void
     ) {}
 
-    present(output: outputDto<GetUncompletedTodosOutput>): void {
+    present(output: outputDto<GetAllTodoOutput>): void {
         this.consumer?.(
             output.result === undefined
                 ? []

@@ -3,14 +3,16 @@ import { useTodoCheckStore } from "@/store/todo-check.store";
 import { useEffect } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
-const useEffectCheckTodo = ({
-    getAllUnaccomplishedTodoController,
-}: DependenciesOf<[ControllerGraph], "getAllUnaccomplishedTodoController">) => {
+const useEffectCheckTodoFromBacklog = ({
+    getAllTodoController,
+}: DependenciesOf<[ControllerGraph], "getAllTodoController">) => {
     useEffect(() => {
         let sub = useTodoCheckStore.subscribe(
             (store) => store.todoCheck.todoId,
             (todoId) => {
-                getAllUnaccomplishedTodoController.getAllTodos();
+                getAllTodoController.getAllTodos({
+                    done: false, // Only fetch unaccomplished todos
+                });
             }
         );
         return () => {
@@ -19,4 +21,4 @@ const useEffectCheckTodo = ({
     }, []);
 };
 
-export default injectHook(useEffectCheckTodo, ControllerGraph);
+export default injectHook(useEffectCheckTodoFromBacklog, ControllerGraph);
