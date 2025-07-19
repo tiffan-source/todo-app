@@ -1,5 +1,3 @@
-import { View, FlatList } from "react-native";
-import React from "react";
 import { Card } from "@/components/ui/card";
 import {
     Checkbox,
@@ -7,19 +5,21 @@ import {
     CheckboxIndicator,
 } from "@/components/ui/checkbox";
 import { CheckIcon } from "@/components/ui/icon";
-import { Text } from "@/components/ui/text";
-import { DependenciesOf, injectComponent } from "react-obsidian";
 import { ControllerGraph } from "@/main/controller.graph";
 import { useTodoStore } from "@/store/todo.store";
-import useEffectCheckTodoFromBacklog from "./hooks/check-todo-from-backlog.hook";
-import useEffectGetAllUnaccomplishedTodo from "./hooks/get-unaccomplished-todo.hooks";
+import React from "react";
+import { View, FlatList } from "react-native";
+import { DependenciesOf, injectComponent } from "react-obsidian";
+import { Text } from "@/components/ui/text";
+import useEffectGetAllTodoDueToday from "./hooks/get-all-todo-due-today.hooks";
+import useEffectCheckTodoFromToday from "./hooks/check-todo-from-today.hook";
 
-const AllUnaccomplishedTodo = ({
+const AllTodoDueToday = ({
     checkTodoController,
 }: DependenciesOf<ControllerGraph, "checkTodoController">) => {
     const todos = useTodoStore((state) => state.todos);
-    useEffectCheckTodoFromBacklog();
-    useEffectGetAllUnaccomplishedTodo();
+    useEffectGetAllTodoDueToday();
+    useEffectCheckTodoFromToday();
 
     return (
         <FlatList
@@ -65,7 +65,6 @@ const AllUnaccomplishedTodo = ({
                                 </View>
                             ))}
                         </View>
-                        {item.dueDate && <Text>{item.dueDate}</Text>}
                     </View>
                 </Card>
             )}
@@ -73,4 +72,4 @@ const AllUnaccomplishedTodo = ({
     );
 };
 
-export default injectComponent(AllUnaccomplishedTodo, ControllerGraph);
+export default injectComponent(AllTodoDueToday, ControllerGraph);

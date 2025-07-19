@@ -3,7 +3,7 @@ import { useTodoCheckStore } from "@/store/todo-check.store";
 import { useEffect } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
-const useEffectCheckTodo = ({
+const useEffectCheckTodoFromBacklog = ({
     getAllTodoController,
 }: DependenciesOf<[ControllerGraph], "getAllTodoController">) => {
     useEffect(() => {
@@ -21,4 +21,4 @@ const useEffectCheckTodo = ({
     }, []);
 };
 
-export default injectHook(useEffectCheckTodo, ControllerGraph);
+export default injectHook(useEffectCheckTodoFromBacklog, ControllerGraph);

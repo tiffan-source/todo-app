@@ -20,7 +20,6 @@ export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
         input: GetAllTodoRepositoryInput
     ): Promise<GetAllTodoRepositoryOutput> {
         try {
-            console.log("Retrieving all todos from AsyncStorage...");
             const jsonDataTodo = await AsyncStorage.getItem("todos");
             const jsonDataLabel = await AsyncStorage.getItem("labels");
             const { filters } = input;
@@ -64,17 +63,12 @@ export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
                     }
 
                     if (filters?.dueDate) {
-                        console.log("filter with due date");
                         if (!this.dueDateFilter(domainTodo, filters.dueDate)) {
                             return; // Skip if due date does not match
                         }
                     }
 
                     if (filters?.done !== undefined) {
-                        console.log(
-                            "filter with done : ",
-                            domainTodo.getDoneDate()
-                        );
                         if (!this.doneFilter(domainTodo, filters.done)) {
                             return; // Skip if done status does not match
                         }
@@ -95,7 +89,16 @@ export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
     private dueDateFilter(todo: ITodo, dueDate: Date[]): boolean {
         let myDueDate = todo.getDueDate();
 
-        return myDueDate !== undefined && dueDate.includes(myDueDate);
+        return (
+            myDueDate !== undefined &&
+            dueDate.find((date) => {
+                return (
+                    date.getFullYear() === myDueDate.getFullYear() &&
+                    date.getMonth() === myDueDate.getMonth() &&
+                    date.getDate() === myDueDate.getDate()
+                );
+            }) !== undefined
+        );
     }
 
     private doneFilter(todo: ITodo, done: boolean): boolean {
