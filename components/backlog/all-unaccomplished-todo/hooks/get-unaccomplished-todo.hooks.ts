@@ -4,11 +4,14 @@ import { useCallback } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
 const useEffectGetAllUnaccomplishedTodo = ({
-    getAllUnaccomplishedTodoController,
-}: DependenciesOf<[ControllerGraph], "getAllUnaccomplishedTodoController">) => {
+    getAllTodoController,
+}: DependenciesOf<[ControllerGraph], "getAllTodoController">) => {
     useFocusEffect(
         useCallback(() => {
-            getAllUnaccomplishedTodoController.getAllTodos();
+            console.log("Fetching all unaccomplished todos...");
+            getAllTodoController.getAllTodos({
+                done: false, // Only fetch unaccomplished todos
+            });
         }, [])
     );
 };

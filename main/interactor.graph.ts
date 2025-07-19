@@ -10,11 +10,12 @@ import {
     IGetAllLabelInteractor,
     IGetAllLabelPresenter,
     IGetAllLabelRepository,
+    IGetAllTodoInteractor,
+    IGetAllTodoPresenter,
+    IGetAllTodoRepository,
+    IGetAllTodoValidation,
     IGetLabelByIdRepository,
     IGetTodoByIdRepository,
-    IGetUncompletedTodosInteractor,
-    IGetUncompletedTodosPresenter,
-    IGetUncompletedTodosRepository,
     IMarkTodoAsCompletedInteractor,
     IMarkTodoAsCompletedPresenter,
     IMarkTodoAsCompletedValidation,
@@ -23,7 +24,7 @@ import {
 import {
     CreateTodoInteractor,
     GetAllLabelInteractor,
-    GetUncompletedTodosInteractor,
+    GetAllTodoInteractor,
     MarkTodoAsCompletedInteractor,
 } from "todo-usecase-default";
 import { RepositoryGraph } from "./repository.graph";
@@ -37,13 +38,15 @@ import { EntityGraph } from "./entity.graph";
 })
 export class InteractorGraph extends ObjectGraph {
     @provides()
-    getAllUnaccomplishedTodoUseCase(
-        getAllUnaccomplishedTodoRepository: IGetUncompletedTodosRepository,
-        getAllUnaccomplishedTodoPresenter: IGetUncompletedTodosPresenter
-    ): IGetUncompletedTodosInteractor {
-        return new GetUncompletedTodosInteractor(
-            getAllUnaccomplishedTodoRepository,
-            getAllUnaccomplishedTodoPresenter
+    getAllTodoUseCase(
+        getAllTodoValidation: IGetAllTodoValidation,
+        getAllTodoRepository: IGetAllTodoRepository,
+        getAllTodoPresenter: IGetAllTodoPresenter
+    ): IGetAllTodoInteractor {
+        return new GetAllTodoInteractor(
+            getAllTodoValidation,
+            getAllTodoRepository,
+            getAllTodoPresenter
         );
     }
 

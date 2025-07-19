@@ -1,26 +1,29 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ILabelFactory, ITodo, ITodoFactory } from "todo-entity";
 import {
-    GetUncompletedTodosRepositoryOutput,
-    IGetUncompletedTodosRepository,
+    GetAllTodoRepositoryInput,
+    GetAllTodoRepositoryOutput,
+    IGetAllTodoRepository,
 } from "todo-usecase";
 import {
     LabelRepoSaveModel,
     TodoRepoSaveModel,
-} from "@/infrastructure/async-storage/repositories/common/repository.model";
+} from "../common/repository.model";
 
-export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
-    implements IGetUncompletedTodosRepository
-{
+export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
     constructor(
         private readonly todoFactory: ITodoFactory,
         private readonly labelFactory: ILabelFactory
     ) {}
 
-    async execute(): Promise<GetUncompletedTodosRepositoryOutput> {
+    async execute(
+        input: GetAllTodoRepositoryInput
+    ): Promise<GetAllTodoRepositoryOutput> {
         try {
+            console.log("Retrieving all todos from AsyncStorage...");
             const jsonDataTodo = await AsyncStorage.getItem("todos");
             const jsonDataLabel = await AsyncStorage.getItem("labels");
+            const { filters } = input;
 
             if (jsonDataTodo) {
                 const todos: TodoRepoSaveModel[] = JSON.parse(jsonDataTodo);
@@ -30,9 +33,6 @@ export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
                 let result: ITodo[] = [];
                 // Convert raw todos to domain model using the factory
                 todos.forEach((todo: TodoRepoSaveModel) => {
-                    if (todo.doneDate) {
-                        return; // Skip completed todos
-                    }
                     const domainTodo: ITodo = this.todoFactory.createWithId(
                         todo.id,
                         todo.title
@@ -59,6 +59,27 @@ export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
                         domainTodo.addDeadline(new Date(todo.dueDate));
                     }
 
+                    if (todo.doneDate) {
+                        domainTodo.accomplish(new Date(todo.doneDate));
+                    }
+
+                    if (filters?.dueDate) {
+                        console.log("filter with due date");
+                        if (!this.dueDateFilter(domainTodo, filters.dueDate)) {
+                            return; // Skip if due date does not match
+                        }
+                    }
+
+                    if (filters?.done !== undefined) {
+                        console.log(
+                            "filter with done : ",
+                            domainTodo.getDoneDate()
+                        );
+                        if (!this.doneFilter(domainTodo, filters.done)) {
+                            return; // Skip if done status does not match
+                        }
+                    }
+
                     result.push(domainTodo);
                 });
                 return result;
@@ -69,5 +90,17 @@ export class GetAllUnaccomplishedTodoTodoAsyncStorageRepository
             console.error("Error retrieving todos from storage:", error);
             throw new Error("Failed to retrieve todos from storage");
         }
+    }
+
+    private dueDateFilter(todo: ITodo, dueDate: Date[]): boolean {
+        let myDueDate = todo.getDueDate();
+
+        return myDueDate !== undefined && dueDate.includes(myDueDate);
+    }
+
+    private doneFilter(todo: ITodo, done: boolean): boolean {
+        return done
+            ? todo.getDoneDate() !== undefined
+            : todo.getDoneDate() === undefined;
     }
 }
