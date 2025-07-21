@@ -1,25 +1,38 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ITodo, ITodoFactory } from "todo-entity";
+import { ILabelFactory, ITodo, ITodoFactory } from "todo-entity";
 import {
     GetTodoByIdRepositoryInput,
     GetTodoByIdRepositoryOutput,
     IGetTodoByIdRepository,
 } from "todo-usecase";
-import { TodoRepoSaveModel } from "../common/repository.model";
+import {
+    LabelRepoSaveModel,
+    TodoRepoSaveModel,
+} from "../common/repository.model";
 
 export class GetTodoByIdAsyncStorageRepository
     implements IGetTodoByIdRepository
 {
-    constructor(private readonly todoFactory: ITodoFactory) {}
+    constructor(
+        private readonly todoFactory: ITodoFactory,
+        private readonly labelFactory: ILabelFactory
+    ) {}
 
     async execute(
         input: GetTodoByIdRepositoryInput
     ): Promise<GetTodoByIdRepositoryOutput> {
         try {
             const jsonData = await AsyncStorage.getItem("todos");
+            const jsonDataLabel = await AsyncStorage.getItem("labels");
+
             if (jsonData) {
                 const todos: TodoRepoSaveModel[] = JSON.parse(jsonData);
+                const labels: LabelRepoSaveModel[] = JSON.parse(
+                    jsonDataLabel || "[]"
+                );
+
                 const todo = todos.find((todo) => todo.id === input);
+
                 if (todo) {
                     const domainTodo: ITodo = this.todoFactory.createWithId(
                         todo.id,
@@ -31,6 +44,24 @@ export class GetTodoByIdAsyncStorageRepository
                     if (todo.doneDate) {
                         domainTodo.accomplish(new Date(todo.doneDate));
                     }
+
+                    for (const labelId of todo.labels ?? []) {
+                        const label = labels.find(
+                            (label) => label.id === labelId
+                        );
+                        if (label) {
+                            const domainLabel = this.labelFactory.createWithId(
+                                label.id,
+                                label.name
+                            );
+                            domainLabel.setColor(label.color);
+                            domainTodo.addLabel(domainLabel);
+                        }
+                    }
+
+                    if (todo.dueDate)
+                        domainTodo.addDeadline(new Date(todo.dueDate));
+
                     return domainTodo;
                 }
             }

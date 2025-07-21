@@ -1,3 +1,4 @@
+import InputSuggestion from "@/components/common/input-suggestion/InputSuggestion";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import {
@@ -8,45 +9,40 @@ import {
 } from "@/components/ui/form-control";
 import { AlertCircleIcon, CalendarDaysIcon, Icon } from "@/components/ui/icon";
 import { Input, InputField } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { Text } from "@/components/ui/text";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
+import { ControllerGraph } from "@/main/controller.graph";
+import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import { DependenciesOf, injectComponent } from "react-obsidian";
-import { useCreateTodoForm } from "./hooks/create-todo-form.hooks";
-import { Text } from "@/components/ui/text";
-import useLabelInputHook from "./hooks/label-input.hook";
-import { ControllerGraph } from "@/main/controller.graph";
-import InputSuggestion from "@/components/common/input-suggestion/InputSuggestion";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { useDateHook } from "./hooks/date.hook";
-import { Switch } from "@/components/ui/switch";
+import { useEditDateHook } from "./hooks/edit-date.hook";
+import useEditLabelHook from "./hooks/edit-label.hook";
+import { useEditTodoFormHook } from "./hooks/edit-todo-form.hook";
 
-type TodoCreationForms = {
+type TodoEditionForms = {
     title: string;
     description: string;
 };
 
-const TodoCreationForm = ({
-    createTodoController,
-}: DependenciesOf<ControllerGraph, "createTodoController">) => {
+const TodoEditForm = ({
+    editTodoController,
+}: DependenciesOf<ControllerGraph, "editTodoController">) => {
+    let todo = useSelectTodoForEditionStore((state) => state.editionTodo.todo);
+
     const {
         control,
         handleSubmit,
         formState: { errors },
-    } = useForm<TodoCreationForms>({
-        defaultValues: {
-            title: "",
-            description: "",
+    } = useForm<TodoEditionForms>({
+        values: {
+            title: todo?.title || "",
+            description: todo?.description || "",
         },
     });
-
-    const {
-        creationError,
-        waitingForCreation,
-        setWaitingForCreation,
-        resetTodoCreation,
-    } = useCreateTodoForm();
 
     const {
         handleLabelTypingInput,
@@ -55,9 +51,16 @@ const TodoCreationForm = ({
         removeTagOnPress,
         labelSuggestions,
         handleSelectSuggestion,
-    } = useLabelInputHook();
+    } = useEditLabelHook();
 
-    const { date, setDate } = useDateHook();
+    const { date, setDate } = useEditDateHook();
+
+    const { errorMessage, waitingForEdition, setWaitingForEdition } =
+        useEditTodoFormHook();
+
+    if (!todo) {
+        return <Text>Loading</Text>;
+    }
 
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -74,8 +77,13 @@ const TodoCreationForm = ({
                             className="mb-4"
                             isInvalid={!!errors.title}
                         >
-                            <Input size="lg">
+                            <Input
+                                size="xl"
+                                className="border-0"
+                            >
                                 <InputField
+                                    className="font-bold "
+                                    size="6xl"
                                     placeholder="New Task"
                                     value={value}
                                     onChangeText={onChange}
@@ -138,19 +146,23 @@ const TodoCreationForm = ({
                             size="xl"
                         />
                         <Box>
-                            {date && (
-                                <DateTimePicker
-                                    value={date}
-                                    mode="date"
-                                    display="default"
-                                    minimumDate={new Date()}
-                                    onChange={(event, date) => {
-                                        if (date) {
-                                            setDate(date);
-                                        }
-                                    }}
-                                />
-                            )}
+                            {date &&
+                                (() => {
+                                    console.log("date inside picker: ", date);
+                                    return (
+                                        <DateTimePicker
+                                            value={date}
+                                            mode="date"
+                                            display="default"
+                                            minimumDate={new Date()}
+                                            onChange={(event, date) => {
+                                                if (date) {
+                                                    setDate(date);
+                                                }
+                                            }}
+                                        />
+                                    );
+                                })()}
                         </Box>
                     </Box>
                     <Box>
@@ -165,26 +177,22 @@ const TodoCreationForm = ({
                     </Box>
                 </Box>
 
-                <Text className="text-error-500">{creationError}</Text>
-
                 <Button
                     onPress={handleSubmit((data) => {
-                        resetTodoCreation();
-                        createTodoController.createTodo(
-                            data.title,
-                            data.description,
-                            tags
+                        editTodoController.editTodo(todo.id, {
+                            title: data.title,
+                            description: data.description,
+                            labelIds: tags
                                 .filter((tag) => tag.id)
                                 .map((tag) => tag.id as string),
-                            tags
+                            newLabelTitles: tags
                                 .filter((tag) => !tag.id)
                                 .map((tag) => tag.name),
-                            date
-                        );
-                        setWaitingForCreation(true);
+                            dueDate: date ? new Date(date) : undefined,
+                        });
                     })}
                 >
-                    {waitingForCreation && <ButtonSpinner />}
+                    {waitingForEdition && <ButtonSpinner />}
                     <ButtonText>Create</ButtonText>
                 </Button>
             </Box>
@@ -192,4 +200,4 @@ const TodoCreationForm = ({
     );
 };
 
-export default injectComponent(TodoCreationForm, ControllerGraph);
+export default injectComponent(TodoEditForm, ControllerGraph);

@@ -1,5 +1,3 @@
-import { View, FlatList } from "react-native";
-import React from "react";
 import { Card } from "@/components/ui/card";
 import {
     Checkbox,
@@ -8,18 +6,28 @@ import {
 } from "@/components/ui/checkbox";
 import { CheckIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import { DependenciesOf, injectComponent } from "react-obsidian";
 import { ControllerGraph } from "@/main/controller.graph";
+import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
 import { useTodoStore } from "@/store/todo.store";
+import { useRouter } from "expo-router";
+import React from "react";
+import { FlatList, Pressable, View } from "react-native";
+import { DependenciesOf, injectComponent } from "react-obsidian";
 import useEffectCheckTodoFromBacklog from "./hooks/check-todo-from-backlog.hook";
 import useEffectGetAllUnaccomplishedTodo from "./hooks/get-unaccomplished-todo.hooks";
 
 const AllUnaccomplishedTodo = ({
     checkTodoController,
-}: DependenciesOf<ControllerGraph, "checkTodoController">) => {
+    getTodoByIdController,
+    getAllLabelController,
+}: DependenciesOf<
+    ControllerGraph,
+    "checkTodoController" | "getTodoByIdController" | "getAllLabelController"
+>) => {
     const todos = useTodoStore((state) => state.todos);
     useEffectCheckTodoFromBacklog();
     useEffectGetAllUnaccomplishedTodo();
+    const router = useRouter();
 
     return (
         <FlatList
@@ -43,12 +51,23 @@ const AllUnaccomplishedTodo = ({
                         </CheckboxIndicator>
                     </Checkbox>
                     <View>
-                        <Text
-                            size="lg"
-                            bold
+                        <Pressable
+                            onPress={() => {
+                                useSelectTodoForEditionStore
+                                    .getState()
+                                    .clearEditionTodo();
+                                getAllLabelController.getAllLabels();
+                                getTodoByIdController.getTodoById(item.id);
+                                router.push(`/${item.id}`);
+                            }}
                         >
-                            {item.title}
-                        </Text>
+                            <Text
+                                size="lg"
+                                bold
+                            >
+                                {item.title}
+                            </Text>
+                        </Pressable>
                         <Text>{item.description}</Text>
                         <View className="flex flex-row items-center gap-2 mt-2">
                             {item.labels.map((label) => (

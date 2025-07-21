@@ -7,6 +7,9 @@ import {
     ICreateTodoPresenter,
     ICreateTodoRepository,
     ICreateTodoValidation,
+    IEditTodoInteractor,
+    IEditTodoPresenter,
+    IEditTodoValidation,
     IGetAllLabelInteractor,
     IGetAllLabelPresenter,
     IGetAllLabelRepository,
@@ -15,7 +18,10 @@ import {
     IGetAllTodoRepository,
     IGetAllTodoValidation,
     IGetLabelByIdRepository,
+    IGetTodoByIdInteractor,
+    IGetTodoByIdPresenter,
     IGetTodoByIdRepository,
+    IGetTodoByIdValidation,
     IMarkTodoAsCompletedInteractor,
     IMarkTodoAsCompletedPresenter,
     IMarkTodoAsCompletedValidation,
@@ -23,8 +29,10 @@ import {
 } from "todo-usecase";
 import {
     CreateTodoInteractor,
+    EditTodoInteractor,
     GetAllLabelInteractor,
     GetAllTodoInteractor,
+    GetTodoByIdInteractor,
     MarkTodoAsCompletedInteractor,
 } from "todo-usecase-default";
 import { RepositoryGraph } from "./repository.graph";
@@ -96,6 +104,42 @@ export class InteractorGraph extends ObjectGraph {
         return new GetAllLabelInteractor(
             getAllLabelRepository,
             getAllLabelPresenter
+        );
+    }
+
+    @provides()
+    getTodoByIdUseCase(
+        getTodoByIdValidation: IGetTodoByIdValidation,
+        getTodoByIdRepository: IGetTodoByIdRepository,
+        getTodoByIdPresenter: IGetTodoByIdPresenter
+    ): IGetTodoByIdInteractor {
+        return new GetTodoByIdInteractor(
+            getTodoByIdValidation,
+            getTodoByIdRepository,
+            getTodoByIdPresenter
+        );
+    }
+
+    @provides()
+    editTodoUseCase(
+        editTodoValidation: IEditTodoValidation,
+        getTodoByIdRepository: IGetTodoByIdRepository,
+        checkLabelExistRepository: ICheckLabelExistRepository,
+        createLabelRepository: ICreateLabelRepository,
+        getLabelByIdRepository: IGetLabelByIdRepository,
+        saveTodoRepository: ISaveTodoRepository,
+        editTodoPresenter: IEditTodoPresenter,
+        labelFactory: ILabelFactory
+    ): IEditTodoInteractor {
+        return new EditTodoInteractor(
+            editTodoValidation,
+            getTodoByIdRepository,
+            checkLabelExistRepository,
+            createLabelRepository,
+            getLabelByIdRepository,
+            saveTodoRepository,
+            editTodoPresenter,
+            labelFactory
         );
     }
 }

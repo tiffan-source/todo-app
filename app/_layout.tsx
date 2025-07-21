@@ -23,6 +23,13 @@ export default function RootLayout() {
                         headerShown: false,
                     }}
                 />
+                <Stack.Screen
+                    name="[edit-todo]"
+                    options={{
+                        presentation: "modal",
+                        headerShown: false,
+                    }}
+                />
             </Stack>
         </GluestackUIProvider>
     );

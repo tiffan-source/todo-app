@@ -2,18 +2,44 @@ import { LabelViewModel } from "@/back-for-front/shared/view-models/LabelViewMod
 import { AppGraph } from "@/main/app.grah";
 import { ControllerGraph } from "@/main/controller.graph";
 import { useLabelStore } from "@/store/label.store";
+import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
 import { useEffect, useState } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
-const useLabelInputHook = ({
+const useEditLabelHook = ({
     getAllLabelController,
 }: DependenciesOf<[ControllerGraph], "getAllLabelController">) => {
-    const [label, setLabel] = useState<string>("");
-    const [tags, setTags] = useState<{ id?: string; name: string }[]>([]);
+    const allLabels = useLabelStore((state) => state.labels);
+
     const [labelSuggestions, setLabelSuggestions] = useState<LabelViewModel[]>(
         []
     );
-    const allLabels = useLabelStore((state) => state.labels);
+
+    const [label, setLabel] = useState<string>("");
+
+    const [tags, setTags] = useState<{ id?: string; name: string }[]>([]);
+
+    useEffect(() => {
+        let sub = useSelectTodoForEditionStore.subscribe(
+            (state) => state.editionTodo.todo?.labels,
+            (labels) => {
+                console.log("check to much rendering");
+
+                if (labels) {
+                    setTags(
+                        labels.map((label) => ({
+                            id: label.id,
+                            name: label.name,
+                        }))
+                    );
+                }
+            }
+        );
+
+        return () => {
+            sub();
+        };
+    }, []);
 
     const handleLabelTypingInput = (text: string) => {
         setLabel(text);
@@ -53,18 +79,14 @@ const useLabelInputHook = ({
         setLabelSuggestions([]);
     };
 
-    useEffect(() => {
-        getAllLabelController.getAllLabels();
-    }, []);
-
     return {
-        label,
-        tags,
         handleLabelTypingInput,
+        tags,
+        label,
         removeTagOnPress,
         labelSuggestions,
         handleSelectSuggestion,
     };
 };
 
-export default injectHook(useLabelInputHook, AppGraph);
+export default injectHook(useEditLabelHook, AppGraph);

@@ -2,14 +2,19 @@ import { CreateTodoController } from "@/back-for-front/todo-creation/controllers
 import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
 import {
     ICreateTodoInteractor,
+    IEditTodoInteractor,
     IGetAllLabelInteractor,
     IGetAllTodoInteractor,
+    IGetTodoByIdInteractor,
     IMarkTodoAsCompletedInteractor,
 } from "todo-usecase";
 import { InteractorGraph } from "./interactor.graph";
 import { CheckTodoController } from "@/back-for-front/todo-modification/controllers/mark-todo-as-completed.controller";
 import { GetAllLabelController } from "@/back-for-front/label-retrieval/controllers/get-all-label.controller";
 import { GetAllTodoController } from "@/back-for-front/todo-retrieval/controllers/get-all-todo.controller";
+import { GetTodoByIdController } from "@/back-for-front/todo-retrieval/controllers/get-todo-by-id.controller";
+import { EditTodoInteractor } from "todo-usecase-default";
+import { EditTodoController } from "@/back-for-front/todo-modification/controllers/edit-todo.controller";
 
 @singleton()
 @graph({ subgraphs: [InteractorGraph] })
@@ -25,6 +30,11 @@ export class ControllerGraph extends ObjectGraph {
     }
 
     @provides()
+    getTodoByIdController(getTodoByIdUseCase: IGetTodoByIdInteractor) {
+        return new GetTodoByIdController(getTodoByIdUseCase);
+    }
+
+    @provides()
     checkTodoController(checkTodoUseCase: IMarkTodoAsCompletedInteractor) {
         return new CheckTodoController(checkTodoUseCase);
     }
@@ -32,5 +42,10 @@ export class ControllerGraph extends ObjectGraph {
     @provides()
     getAllLabelController(getAllLabelUseCase: IGetAllLabelInteractor) {
         return new GetAllLabelController(getAllLabelUseCase);
+    }
+
+    @provides()
+    editTodoController(editTodoUseCase: IEditTodoInteractor) {
+        return new EditTodoController(editTodoUseCase);
     }
 }

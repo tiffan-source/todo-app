@@ -56,8 +56,11 @@ export class RepositoryGraph extends ObjectGraph {
     }
 
     @provides()
-    getTodoByIdRepository(todoFactory: ITodoFactory): IGetTodoByIdRepository {
-        return new GetTodoByIdAsyncStorageRepository(todoFactory);
+    getTodoByIdRepository(
+        todoFactory: ITodoFactory,
+        labelFactory: ILabelFactory
+    ): IGetTodoByIdRepository {
+        return new GetTodoByIdAsyncStorageRepository(todoFactory, labelFactory);
     }
 
     @provides()

@@ -1,12 +1,16 @@
 import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
 import {
     ICreateTodoValidation,
+    IEditTodoValidation,
     IGetAllTodoValidation,
+    IGetTodoByIdValidation,
     IMarkTodoAsCompletedValidation,
 } from "todo-usecase";
 import {
     CreateTodoValidation,
+    EditTodoValidation,
     GetAllTodoValidation,
+    GetTodoByIdValidation,
     MarkTodoAsCompletedValidation,
 } from "todo-usecase-default";
 
@@ -26,5 +30,15 @@ export class ValidationGraph extends ObjectGraph {
     @provides()
     getAllTodoValidation(): IGetAllTodoValidation {
         return new GetAllTodoValidation();
+    }
+
+    @provides()
+    getTodoByIdValidation(): IGetTodoByIdValidation {
+        return new GetTodoByIdValidation();
+    }
+
+    @provides()
+    editTodoValidation(): IEditTodoValidation {
+        return new EditTodoValidation();
     }
 }

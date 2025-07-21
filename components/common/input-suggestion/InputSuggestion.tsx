@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import { Input, InputField } from "@/components/ui/input";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
-import { set } from "react-hook-form";
 
-type InputSuggestion = {
+type InputSuggestionData = {
     value: string;
     label: string;
 };
 
 type InputSuggestionProps = {
     onChange: (text: string) => void;
-    suggestions: InputSuggestion[];
+    suggestions: InputSuggestionData[];
     value: string;
-    onSelectSuggestion?: (suggestion: InputSuggestion) => void;
+    onSelectSuggestion?: (suggestion: InputSuggestionData) => void;
     placeholder?: string;
 };
 

@@ -1,20 +1,21 @@
 import { GetAllLabelPresenter } from "@/back-for-front/label-retrieval/presenters/get-all-label.presenter";
-import { LabelViewModel } from "@/back-for-front/shared/view-models/LabelViewModel";
-import { TodoCheckViewModel } from "@/back-for-front/shared/view-models/TodoCheckViewModel";
-import { TodoCreatedViewModel } from "@/back-for-front/shared/view-models/TodoCreatedViewModel";
-import { TodoTicketViewModel } from "@/back-for-front/shared/view-models/TodoTicketViewModel";
 import { CreateTodoPresenter } from "@/back-for-front/todo-creation/presenters/create-todo.presenter";
+import { EditTodoPresenter } from "@/back-for-front/todo-modification/presenters/edit-todo.presenter";
 import { MarkTodoAsCompletedPresenter } from "@/back-for-front/todo-modification/presenters/mark-todo-as-completed.presenter";
 import { GetAllTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-todo.presenter";
+import { GetTodoByIdPresenter } from "@/back-for-front/todo-retrieval/presenters/get-todo-by-id.presenter";
 import { useLabelStore } from "@/store/label.store";
+import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
 import { useTodoCheckStore } from "@/store/todo-check.store";
 import { useTodoCreateStore } from "@/store/todo-create.store";
 import { useTodoStore } from "@/store/todo.store";
-import { graph, ObjectGraph, singleton, provides } from "react-obsidian";
+import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
 import {
     ICreateTodoPresenter,
+    IEditTodoPresenter,
     IGetAllLabelPresenter,
     IGetAllTodoPresenter,
+    IGetTodoByIdPresenter,
     IMarkTodoAsCompletedPresenter,
 } from "todo-usecase";
 
@@ -43,5 +44,19 @@ export class PresenterGraph extends ObjectGraph {
     @provides()
     getAllLabelPresenter(): IGetAllLabelPresenter {
         return new GetAllLabelPresenter(useLabelStore.getState().setLabels);
+    }
+
+    @provides()
+    getTodoByIdPresenter(): IGetTodoByIdPresenter {
+        return new GetTodoByIdPresenter(
+            useSelectTodoForEditionStore.getState().setEditionTodo
+        );
+    }
+
+    @provides()
+    editTodoPresenter(): IEditTodoPresenter {
+        return new EditTodoPresenter(
+            useSelectTodoForEditionStore.getState().setEditionTodo
+        );
     }
 }

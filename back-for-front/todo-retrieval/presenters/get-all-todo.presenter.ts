@@ -29,7 +29,7 @@ export class GetAllTodoPresenter implements IGetAllTodoPresenter {
                       dueDate: todo.dueDate
                           ? todo.dueDate.getDate() +
                             "/" +
-                            todo.dueDate.getMonth()
+                            (todo.dueDate.getMonth() + 1)
                           : "",
                   }))
         );
