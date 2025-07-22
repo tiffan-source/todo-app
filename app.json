@@ -9,14 +9,19 @@
         "userInterfaceStyle": "automatic",
         "newArchEnabled": true,
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.blackgenius.todoapp",
+            "infoPlist": {
+                "ITSAppUsesNonExemptEncryption": false
+            }
         },
         "android": {
             "adaptiveIcon": {
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#ffffff"
             },
-            "edgeToEdgeEnabled": true
+            "edgeToEdgeEnabled": true,
+            "package": "com.blackgenius.todoapp"
         },
         "web": {
             "bundler": "metro",
@@ -34,6 +39,13 @@
                     "backgroundColor": "#ffffff"
                 }
             ]
-        ]
+        ],
+        "extra": {
+            "router": {},
+            "eas": {
+                "projectId": "6ee96a7b-3d44-42bc-981e-99b29eda9ccc"
+            }
+        },
+        "owner": "blackgenius"
     }
 }
