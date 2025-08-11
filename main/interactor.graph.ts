@@ -36,25 +36,39 @@ import {
     MarkTodoAsCompletedInteractor,
 } from "todo-usecase-default";
 import { RepositoryGraph } from "./repository.graph";
-import { PresenterGraph } from "./presenter.graph";
 import { ValidationGraph } from "./validation.graph";
 import { EntityGraph } from "./entity.graph";
+import { useTodoStore } from "@/store/todo.store";
+import { PresenterGraph } from "./presenter.graph";
 
 @singleton()
 @graph({
-    subgraphs: [RepositoryGraph, PresenterGraph, ValidationGraph, EntityGraph],
+    subgraphs: [RepositoryGraph, ValidationGraph, EntityGraph, PresenterGraph],
 })
 export class InteractorGraph extends ObjectGraph {
     @provides()
-    getAllTodoUseCase(
+    getAllUnDoneTodoUseCase(
         getAllTodoValidation: IGetAllTodoValidation,
         getAllTodoRepository: IGetAllTodoRepository,
-        getAllTodoPresenter: IGetAllTodoPresenter
+        getAllUnDoneTodoPresenter: IGetAllTodoPresenter
     ): IGetAllTodoInteractor {
         return new GetAllTodoInteractor(
             getAllTodoValidation,
             getAllTodoRepository,
-            getAllTodoPresenter
+            getAllUnDoneTodoPresenter
+        );
+    }
+
+    @provides()
+    getTodayTodoUseCase(
+        getAllTodoValidation: IGetAllTodoValidation,
+        getAllTodoRepository: IGetAllTodoRepository,
+        getAllTodayTodoPresenter: IGetAllTodoPresenter
+    ): IGetAllTodoInteractor {
+        return new GetAllTodoInteractor(
+            getAllTodoValidation,
+            getAllTodoRepository,
+            getAllTodayTodoPresenter
         );
     }
 
@@ -108,15 +122,15 @@ export class InteractorGraph extends ObjectGraph {
     }
 
     @provides()
-    getTodoByIdUseCase(
+    getTodoByIdForEditionUseCase(
         getTodoByIdValidation: IGetTodoByIdValidation,
         getTodoByIdRepository: IGetTodoByIdRepository,
-        getTodoByIdPresenter: IGetTodoByIdPresenter
+        getTodoByIdForEditionPresenter: IGetTodoByIdPresenter
     ): IGetTodoByIdInteractor {
         return new GetTodoByIdInteractor(
             getTodoByIdValidation,
             getTodoByIdRepository,
-            getTodoByIdPresenter
+            getTodoByIdForEditionPresenter
         );
     }
 

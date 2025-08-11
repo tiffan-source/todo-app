@@ -1,14 +1,12 @@
-import { GetAllLabelPresenter } from "@/back-for-front/label-retrieval/presenters/get-all-label.presenter";
-import { CreateTodoPresenter } from "@/back-for-front/todo-creation/presenters/create-todo.presenter";
-import { EditTodoPresenter } from "@/back-for-front/todo-modification/presenters/edit-todo.presenter";
-import { MarkTodoAsCompletedPresenter } from "@/back-for-front/todo-modification/presenters/mark-todo-as-completed.presenter";
-import { GetAllTodoPresenter } from "@/back-for-front/todo-retrieval/presenters/get-all-todo.presenter";
-import { GetTodoByIdPresenter } from "@/back-for-front/todo-retrieval/presenters/get-todo-by-id.presenter";
-import { useLabelStore } from "@/store/label.store";
-import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
-import { useTodoCheckStore } from "@/store/todo-check.store";
-import { useTodoCreateStore } from "@/store/todo-create.store";
-import { useTodoStore } from "@/store/todo.store";
+import { getAllUndoneTodoPresenter } from "@/components/backlog/all-unaccomplished-todo/stores/unaccomplished-todo.store";
+import { createTodoPresenter } from "@/components/create-todo/todo-creation-form/stores/todo-created.store";
+import { todoEditedPresenter } from "@/components/edit-todo/todo-edit-form/stores/todo-edited.store";
+import { getAllTodayTodoPresenter } from "@/components/today/all-todo-due-today/stores/today-todo.store";
+import { getAllLabelUseCase } from "@/store/label.store";
+import {
+    getTodoByIdForEditionPresenter,
+    markTodoAsCompletedPresenter,
+} from "@/store/todo.store";
 import { graph, ObjectGraph, provides, singleton } from "react-obsidian";
 import {
     ICreateTodoPresenter,
@@ -23,40 +21,37 @@ import {
 @graph()
 export class PresenterGraph extends ObjectGraph {
     @provides()
-    getAllTodoPresenter(): IGetAllTodoPresenter {
-        return new GetAllTodoPresenter(useTodoStore.getState().setTodos);
+    getAllUnDoneTodoPresenter(): IGetAllTodoPresenter {
+        return getAllUndoneTodoPresenter;
     }
 
     @provides()
     createTodoPresenter(): ICreateTodoPresenter {
-        return new CreateTodoPresenter(
-            useTodoCreateStore.getState().setTodoCreate
-        );
+        return createTodoPresenter;
     }
 
     @provides()
     checkTodoPresenter(): IMarkTodoAsCompletedPresenter {
-        return new MarkTodoAsCompletedPresenter(
-            useTodoCheckStore.getState().setTodoCheck
-        );
+        return markTodoAsCompletedPresenter;
+    }
+
+    @provides()
+    getAllTodayTodoPresenter(): IGetAllTodoPresenter {
+        return getAllTodayTodoPresenter;
     }
 
     @provides()
     getAllLabelPresenter(): IGetAllLabelPresenter {
-        return new GetAllLabelPresenter(useLabelStore.getState().setLabels);
+        return getAllLabelUseCase;
     }
 
     @provides()
-    getTodoByIdPresenter(): IGetTodoByIdPresenter {
-        return new GetTodoByIdPresenter(
-            useSelectTodoForEditionStore.getState().setEditionTodo
-        );
+    getTodoByIdForEditionPresenter(): IGetTodoByIdPresenter {
+        return getTodoByIdForEditionPresenter;
     }
 
     @provides()
     editTodoPresenter(): IEditTodoPresenter {
-        return new EditTodoPresenter(
-            useSelectTodoForEditionStore.getState().setEditionTodo
-        );
+        return todoEditedPresenter;
     }
 }
