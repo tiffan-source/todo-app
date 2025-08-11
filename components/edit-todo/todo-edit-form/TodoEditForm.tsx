@@ -12,8 +12,6 @@ import { Input, InputField } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Text } from "@/components/ui/text";
 import { Textarea, TextareaInput } from "@/components/ui/textarea";
-import { ControllerGraph } from "@/main/controller.graph";
-import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -22,6 +20,8 @@ import { DependenciesOf, injectComponent } from "react-obsidian";
 import { useEditDateHook } from "./hooks/edit-date.hook";
 import useEditLabelHook from "./hooks/edit-label.hook";
 import { useEditTodoFormHook } from "./hooks/edit-todo-form.hook";
+import { InteractorGraph } from "@/main/interactor.graph";
+import { useTodoStore } from "@/store/todo.store";
 
 type TodoEditionForms = {
     title: string;
@@ -29,9 +29,9 @@ type TodoEditionForms = {
 };
 
 const TodoEditForm = ({
-    editTodoController,
-}: DependenciesOf<ControllerGraph, "editTodoController">) => {
-    let todo = useSelectTodoForEditionStore((state) => state.editionTodo.todo);
+    editTodoUseCase,
+}: DependenciesOf<InteractorGraph, "editTodoUseCase">) => {
+    let todo = useTodoStore((state) => state.todoSelectToEdit);
 
     const {
         control,
@@ -179,17 +179,24 @@ const TodoEditForm = ({
 
                 <Button
                     onPress={handleSubmit((data) => {
-                        editTodoController.editTodo(todo.id, {
-                            title: data.title,
-                            description: data.description,
-                            labelIds: tags
-                                .filter((tag) => tag.id)
-                                .map((tag) => tag.id as string),
-                            newLabelTitles: tags
-                                .filter((tag) => !tag.id)
-                                .map((tag) => tag.name),
-                            dueDate: date ? new Date(date) : undefined,
+                        editTodoUseCase.execute({
+                            timestamp: new Date(),
+                            input: {
+                                todoId: todo.id,
+                                newData: {
+                                    title: data.title,
+                                    description: data.description,
+                                    labelIds: tags
+                                        .filter((tag) => tag.id)
+                                        .map((tag) => tag.id as string),
+                                    newLabelTitles: tags
+                                        .filter((tag) => !tag.id)
+                                        .map((tag) => tag.name),
+                                    dueDate: date,
+                                },
+                            },
                         });
+                        setWaitingForEdition(true);
                     })}
                 >
                     {waitingForEdition && <ButtonSpinner />}
@@ -200,4 +207,4 @@ const TodoEditForm = ({
     );
 };
 
-export default injectComponent(TodoEditForm, ControllerGraph);
+export default injectComponent(TodoEditForm, InteractorGraph);

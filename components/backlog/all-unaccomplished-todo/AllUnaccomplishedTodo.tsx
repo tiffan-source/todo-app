@@ -6,8 +6,7 @@ import {
 } from "@/components/ui/checkbox";
 import { CheckIcon } from "@/components/ui/icon";
 import { Text } from "@/components/ui/text";
-import { ControllerGraph } from "@/main/controller.graph";
-import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
+import { InteractorGraph } from "@/main/interactor.graph";
 import { useTodoStore } from "@/store/todo.store";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -15,16 +14,16 @@ import { FlatList, Pressable, View } from "react-native";
 import { DependenciesOf, injectComponent } from "react-obsidian";
 import useEffectCheckTodoFromBacklog from "./hooks/check-todo-from-backlog.hook";
 import useEffectGetAllUnaccomplishedTodo from "./hooks/get-unaccomplished-todo.hooks";
+import { useUnaccomplishedTodoStore } from "./stores/unaccomplished-todo.store";
 
 const AllUnaccomplishedTodo = ({
-    checkTodoController,
-    getTodoByIdController,
-    getAllLabelController,
+    checkTodoUseCase,
+    getTodoByIdForEditionUseCase,
 }: DependenciesOf<
-    ControllerGraph,
-    "checkTodoController" | "getTodoByIdController" | "getAllLabelController"
+    InteractorGraph,
+    "checkTodoUseCase" | "getTodoByIdForEditionUseCase"
 >) => {
-    const todos = useTodoStore((state) => state.todos);
+    const todos = useUnaccomplishedTodoStore((state) => state.todos);
     useEffectCheckTodoFromBacklog();
     useEffectGetAllUnaccomplishedTodo();
     const router = useRouter();
@@ -40,10 +39,15 @@ const AllUnaccomplishedTodo = ({
                 >
                     <Checkbox
                         className="mt-1"
-                        value={item.checked ? "checked" : "unchecked"} // This must always be unchecked
+                        value={"unchecked"}
                         size="md"
                         onChange={() => {
-                            checkTodoController.checkTodo(item.id);
+                            checkTodoUseCase.execute({
+                                timestamp: new Date(),
+                                input: {
+                                    todoId: item.id,
+                                },
+                            });
                         }}
                     >
                         <CheckboxIndicator>
@@ -53,11 +57,13 @@ const AllUnaccomplishedTodo = ({
                     <View>
                         <Pressable
                             onPress={() => {
-                                useSelectTodoForEditionStore
-                                    .getState()
-                                    .clearEditionTodo();
-                                getAllLabelController.getAllLabels();
-                                getTodoByIdController.getTodoById(item.id);
+                                useTodoStore.getState().resetTodoSelectToEdit();
+                                getTodoByIdForEditionUseCase.execute({
+                                    input: {
+                                        idTodo: item.id,
+                                    },
+                                    timestamp: new Date(),
+                                });
                                 router.push(`/${item.id}`);
                             }}
                         >
@@ -84,7 +90,9 @@ const AllUnaccomplishedTodo = ({
                                 </View>
                             ))}
                         </View>
-                        {item.dueDate && <Text>{item.dueDate}</Text>}
+                        {item.dueDate && (
+                            <Text>{item.dueDate.toISOString()}</Text>
+                        )}
                     </View>
                 </Card>
             )}
@@ -92,4 +100,4 @@ const AllUnaccomplishedTodo = ({
     );
 };
 
-export default injectComponent(AllUnaccomplishedTodo, ControllerGraph);
+export default injectComponent(AllUnaccomplishedTodo, InteractorGraph);

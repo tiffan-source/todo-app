@@ -1,12 +1,12 @@
-import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
+import { useTodoStore } from "@/store/todo.store";
 import { useEffect, useState } from "react";
 
 export const useEditDateHook = () => {
     const [date, setDate] = useState<Date | undefined>(undefined);
 
     useEffect(() => {
-        let sub = useSelectTodoForEditionStore.subscribe(
-            (state) => state.editionTodo.todo?.dueDate,
+        let sub = useTodoStore.subscribe(
+            (state) => state.todoSelectToEdit?.dueDate,
             (dueDate) => {
                 console.log("check to much rendering :", dueDate);
                 if (dueDate) {

@@ -1,18 +1,23 @@
-import { ControllerGraph } from "@/main/controller.graph";
+import { InteractorGraph } from "@/main/interactor.graph";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
 const useEffectGetAllUnaccomplishedTodo = ({
-    getAllTodoController,
-}: DependenciesOf<[ControllerGraph], "getAllTodoController">) => {
+    getAllUnDoneTodoUseCase,
+}: DependenciesOf<[InteractorGraph], "getAllUnDoneTodoUseCase">) => {
     useFocusEffect(
         useCallback(() => {
-            getAllTodoController.getAllTodos({
-                done: false, // Only fetch unaccomplished todos
+            getAllUnDoneTodoUseCase.execute({
+                timestamp: new Date(),
+                input: {
+                    filters: {
+                        done: false,
+                    },
+                },
             });
         }, [])
     );
 };
 
-export default injectHook(useEffectGetAllUnaccomplishedTodo, ControllerGraph);
+export default injectHook(useEffectGetAllUnaccomplishedTodo, InteractorGraph);

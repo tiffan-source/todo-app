@@ -1,19 +1,24 @@
-import { ControllerGraph } from "@/main/controller.graph";
+import { InteractorGraph } from "@/main/interactor.graph";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
 const useEffectGetAllTodoDueToday = ({
-    getAllTodoController,
-}: DependenciesOf<[ControllerGraph], "getAllTodoController">) => {
+    getTodayTodoUseCase,
+}: DependenciesOf<[InteractorGraph], "getTodayTodoUseCase">) => {
     useFocusEffect(
         useCallback(() => {
-            getAllTodoController.getAllTodos({
-                done: false, // Only fetch unaccomplished todos
-                dueDate: [new Date()], // Only fetch todos due today
+            getTodayTodoUseCase.execute({
+                timestamp: new Date(),
+                input: {
+                    filters: {
+                        dueDate: [new Date()],
+                        done: false,
+                    },
+                },
             });
         }, [])
     );
 };
 
-export default injectHook(useEffectGetAllTodoDueToday, ControllerGraph);
+export default injectHook(useEffectGetAllTodoDueToday, InteractorGraph);

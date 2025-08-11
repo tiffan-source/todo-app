@@ -1,17 +1,23 @@
-import { ControllerGraph } from "@/main/controller.graph";
-import { useTodoCheckStore } from "@/store/todo-check.store";
+import { InteractorGraph } from "@/main/interactor.graph";
+import { useTodoStore } from "@/store/todo.store";
 import { useEffect } from "react";
 import { DependenciesOf, injectHook } from "react-obsidian";
 
 const useEffectCheckTodoFromBacklog = ({
-    getAllTodoController,
-}: DependenciesOf<[ControllerGraph], "getAllTodoController">) => {
+    getAllUnDoneTodoUseCase,
+}: DependenciesOf<[InteractorGraph], "getAllUnDoneTodoUseCase">) => {
     useEffect(() => {
-        let sub = useTodoCheckStore.subscribe(
-            (store) => store.todoCheck.todoId,
-            (todoId) => {
-                getAllTodoController.getAllTodos({
-                    done: false, // Only fetch unaccomplished todos
+        let sub = useTodoStore.subscribe(
+            (store) => store.todoChecked,
+            () => {
+                console.log("Todo checked, fetching all unaccomplished todos");
+                getAllUnDoneTodoUseCase.execute({
+                    timestamp: new Date(),
+                    input: {
+                        filters: {
+                            done: false, // Only fetch unaccomplished todos
+                        },
+                    },
                 });
             }
         );
@@ -21,4 +27,4 @@ const useEffectCheckTodoFromBacklog = ({
     }, []);
 };
 
-export default injectHook(useEffectCheckTodoFromBacklog, ControllerGraph);
+export default injectHook(useEffectCheckTodoFromBacklog, InteractorGraph);

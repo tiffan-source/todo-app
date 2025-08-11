@@ -1,6 +1,6 @@
-import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+import { useTodoEditedStore } from "../stores/todo-edited.store";
 
 export const useEditTodoFormHook = () => {
     const [waitingForEdition, setWaitingForEdition] = useState<boolean>(false);
@@ -8,18 +8,17 @@ export const useEditTodoFormHook = () => {
         undefined
     );
     useEffect(() => {
-        const sub = useSelectTodoForEditionStore.subscribe(
+        const sub = useTodoEditedStore.subscribe(
             (state) => ({
-                success: state.editionTodo.successEdition,
-                errorEdition: state.editionTodo.errorMessageEdition,
+                success: state.todoEdited?.success,
             }),
-            ({ success, errorEdition }) => {
+            ({ success }) => {
                 if (success) {
                     router.back();
                     setWaitingForEdition(false);
-                } else if (success === false && errorEdition) {
+                } else if (success === false) {
                     setWaitingForEdition(true);
-                    setErrorMessage(errorEdition);
+                    setErrorMessage("Failed to edit todo. Please try again.");
                 }
             }
         );

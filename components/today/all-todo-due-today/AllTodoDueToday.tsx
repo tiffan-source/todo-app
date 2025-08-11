@@ -5,21 +5,28 @@ import {
     CheckboxIndicator,
 } from "@/components/ui/checkbox";
 import { CheckIcon } from "@/components/ui/icon";
-import { ControllerGraph } from "@/main/controller.graph";
 import { useTodoStore } from "@/store/todo.store";
 import React from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Pressable } from "react-native";
 import { DependenciesOf, injectComponent } from "react-obsidian";
 import { Text } from "@/components/ui/text";
 import useEffectGetAllTodoDueToday from "./hooks/get-all-todo-due-today.hooks";
 import useEffectCheckTodoFromToday from "./hooks/check-todo-from-today.hook";
+import { InteractorGraph } from "@/main/interactor.graph";
+import { useTodayTodoStore } from "./stores/today-todo.store";
+import { useRouter } from "expo-router";
 
 const AllTodoDueToday = ({
-    checkTodoController,
-}: DependenciesOf<ControllerGraph, "checkTodoController">) => {
-    const todos = useTodoStore((state) => state.todos);
+    checkTodoUseCase,
+    getTodoByIdForEditionUseCase,
+}: DependenciesOf<
+    InteractorGraph,
+    "checkTodoUseCase" | "getTodoByIdForEditionUseCase"
+>) => {
+    const todos = useTodayTodoStore((state) => state.todos);
     useEffectGetAllTodoDueToday();
     useEffectCheckTodoFromToday();
+    const router = useRouter();
 
     return (
         <FlatList
@@ -32,10 +39,15 @@ const AllTodoDueToday = ({
                 >
                     <Checkbox
                         className="mt-1"
-                        value={item.checked ? "checked" : "unchecked"} // This must always be unchecked
+                        value={"unchecked"} // This must always be unchecked
                         size="md"
                         onChange={() => {
-                            checkTodoController.checkTodo(item.id);
+                            checkTodoUseCase.execute({
+                                timestamp: new Date(),
+                                input: {
+                                    todoId: item.id,
+                                },
+                            });
                         }}
                     >
                         <CheckboxIndicator>
@@ -43,12 +55,25 @@ const AllTodoDueToday = ({
                         </CheckboxIndicator>
                     </Checkbox>
                     <View>
-                        <Text
-                            size="lg"
-                            bold
+                        <Pressable
+                            onPress={() => {
+                                useTodoStore.getState().resetTodoSelectToEdit();
+                                getTodoByIdForEditionUseCase.execute({
+                                    input: {
+                                        idTodo: item.id,
+                                    },
+                                    timestamp: new Date(),
+                                });
+                                router.push(`/${item.id}`);
+                            }}
                         >
-                            {item.title}
-                        </Text>
+                            <Text
+                                size="lg"
+                                bold
+                            >
+                                {item.title}
+                            </Text>
+                        </Pressable>
                         <Text>{item.description}</Text>
                         <View className="flex flex-row items-center gap-2 mt-2">
                             {item.labels.map((label) => (
@@ -72,4 +97,4 @@ const AllTodoDueToday = ({
     );
 };
 
-export default injectComponent(AllTodoDueToday, ControllerGraph);
+export default injectComponent(AllTodoDueToday, InteractorGraph);

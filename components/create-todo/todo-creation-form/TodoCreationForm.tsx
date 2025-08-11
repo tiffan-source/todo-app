@@ -16,11 +16,11 @@ import { DependenciesOf, injectComponent } from "react-obsidian";
 import { useCreateTodoForm } from "./hooks/create-todo-form.hooks";
 import { Text } from "@/components/ui/text";
 import useLabelInputHook from "./hooks/label-input.hook";
-import { ControllerGraph } from "@/main/controller.graph";
 import InputSuggestion from "@/components/common/input-suggestion/InputSuggestion";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useDateHook } from "./hooks/date.hook";
 import { Switch } from "@/components/ui/switch";
+import { InteractorGraph } from "@/main/interactor.graph";
 
 type TodoCreationForms = {
     title: string;
@@ -28,8 +28,8 @@ type TodoCreationForms = {
 };
 
 const TodoCreationForm = ({
-    createTodoController,
-}: DependenciesOf<ControllerGraph, "createTodoController">) => {
+    createTodoUseCase,
+}: DependenciesOf<InteractorGraph, "createTodoUseCase">) => {
     const {
         control,
         handleSubmit,
@@ -170,17 +170,20 @@ const TodoCreationForm = ({
                 <Button
                     onPress={handleSubmit((data) => {
                         resetTodoCreation();
-                        createTodoController.createTodo(
-                            data.title,
-                            data.description,
-                            tags
-                                .filter((tag) => tag.id)
-                                .map((tag) => tag.id as string),
-                            tags
-                                .filter((tag) => !tag.id)
-                                .map((tag) => tag.name),
-                            date
-                        );
+                        createTodoUseCase.execute({
+                            timestamp: new Date(),
+                            input: {
+                                title: data.title,
+                                description: data.description,
+                                labelIds: tags
+                                    .filter((tag) => tag.id)
+                                    .map((tag) => tag.id as string),
+                                newLabelTitles: tags
+                                    .filter((tag) => !tag.id)
+                                    .map((tag) => tag.name),
+                                dueDate: date,
+                            },
+                        });
                         setWaitingForCreation(true);
                     })}
                 >
@@ -192,4 +195,4 @@ const TodoCreationForm = ({
     );
 };
 
-export default injectComponent(TodoCreationForm, ControllerGraph);
+export default injectComponent(TodoCreationForm, InteractorGraph);

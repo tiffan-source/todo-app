@@ -1,12 +1,13 @@
 import { router } from "expo-router";
-import { useTodoCreateStore } from "@/store/todo-create.store";
 import { useEffect, useState } from "react";
+import { useTodoCreatedStore } from "../stores/todo-created.store";
 
 export let useCreateTodoForm = () => {
     useEffect(() => {
-        let sub = useTodoCreateStore.subscribe(
-            (state) => state.todo.success,
+        let sub = useTodoCreatedStore.subscribe(
+            (state) => state.todoCreated?.success,
             (success) => {
+                console.log("useCreateTodoForm: success", success);
                 if (success === true) {
                     router.back();
                 } else if (success === false) {
@@ -20,11 +21,11 @@ export let useCreateTodoForm = () => {
         };
     }, []);
 
-    const creationError = useTodoCreateStore(
-        (state) => state.todo.errorMessage
+    const creationError = useTodoCreatedStore(
+        (state) => state.todoCreated?.errorMessage
     );
 
-    const resetTodoCreation = useTodoCreateStore((state) => state.reset);
+    const resetTodoCreation = useTodoCreatedStore((state) => state.reset);
 
     const [waitingForCreation, setWaitingForCreation] =
         useState<boolean>(false);

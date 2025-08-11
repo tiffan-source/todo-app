@@ -1,37 +1,30 @@
-import { LabelViewModel } from "@/back-for-front/shared/view-models/LabelViewModel";
 import { AppGraph } from "@/main/app.grah";
-import { ControllerGraph } from "@/main/controller.graph";
 import { useLabelStore } from "@/store/label.store";
-import { useSelectTodoForEditionStore } from "@/store/select-todo-for-edition.store";
+import { useTodoStore } from "@/store/todo.store";
 import { useEffect, useState } from "react";
-import { DependenciesOf, injectHook } from "react-obsidian";
+import { injectHook } from "react-obsidian";
 
-const useEditLabelHook = ({
-    getAllLabelController,
-}: DependenciesOf<[ControllerGraph], "getAllLabelController">) => {
+const useEditLabelHook = () => {
     const allLabels = useLabelStore((state) => state.labels);
 
-    const [labelSuggestions, setLabelSuggestions] = useState<LabelViewModel[]>(
-        []
-    );
+    const [labelSuggestions, setLabelSuggestions] = useState<any[]>([]);
 
     const [label, setLabel] = useState<string>("");
 
     const [tags, setTags] = useState<{ id?: string; name: string }[]>([]);
 
     useEffect(() => {
-        let sub = useSelectTodoForEditionStore.subscribe(
-            (state) => state.editionTodo.todo?.labels,
+        let sub = useTodoStore.subscribe(
+            (state) => state.todoSelectToEdit?.labels,
             (labels) => {
-                console.log("check to much rendering");
-
                 if (labels) {
-                    setTags(
-                        labels.map((label) => ({
-                            id: label.id,
-                            name: label.name,
-                        }))
-                    );
+                    const formattedTags = labels.map((label) => ({
+                        id: label.id,
+                        name: label.name,
+                    }));
+                    setTags(formattedTags);
+                } else {
+                    setTags([]);
                 }
             }
         );
