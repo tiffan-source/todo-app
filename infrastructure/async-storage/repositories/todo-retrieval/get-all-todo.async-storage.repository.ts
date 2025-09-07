@@ -16,7 +16,7 @@ export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
         private readonly labelFactory: ILabelFactory
     ) {}
 
-    async execute(
+    async getAllTodos(
         input: GetAllTodoRepositoryInput
     ): Promise<GetAllTodoRepositoryOutput> {
         try {

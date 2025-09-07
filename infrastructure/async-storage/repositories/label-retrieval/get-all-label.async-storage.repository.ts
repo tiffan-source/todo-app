@@ -10,7 +10,7 @@ export class GetAllLabelAsyncStorageRepository
     implements IGetAllLabelRepository
 {
     constructor(private readonly labelFactory: ILabelFactory) {}
-    async execute(): Promise<GetAllLabelRepositoryOutput> {
+    async getAllLabels(): Promise<GetAllLabelRepositoryOutput> {
         try {
             const jsonData = await AsyncStorage.getItem("labels");
             const labels: LabelRepoSaveModel[] = jsonData

@@ -18,7 +18,7 @@ export class GetTodoByIdAsyncStorageRepository
         private readonly labelFactory: ILabelFactory
     ) {}
 
-    async execute(
+    async getTodoById(
         input: GetTodoByIdRepositoryInput
     ): Promise<GetTodoByIdRepositoryOutput> {
         try {

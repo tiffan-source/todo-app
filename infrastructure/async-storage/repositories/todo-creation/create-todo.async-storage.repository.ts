@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { TodoRepoSaveModel } from "../common/repository.model";
 
 export class CreateTodoAsyncStorageRepository implements ICreateTodoRepository {
-    async execute(
+    async createTodo(
         input: CreateTodoRepositoryInput
     ): Promise<CreateTodoRepositoryOutput> {
         let newTodo: TodoRepoSaveModel = {

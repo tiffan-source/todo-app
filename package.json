@@ -66,8 +66,8 @@
         "tailwindcss": "^3.4.17",
         "todo-entity": "^2.0.0",
         "todo-entity-default": "^1.1.0",
-        "todo-usecase": "^5.0.0",
-        "todo-usecase-default": "^3.0.0",
+        "todo-usecase": "^6.0.0",
+        "todo-usecase-default": "^3.2.1",
         "zustand": "^5.0.6"
     },
     "devDependencies": {

@@ -12,7 +12,7 @@ export class GetLabelByIdAsyncStorageRepository
 {
     constructor(private labelFactory: ILabelFactory) {}
 
-    async execute(
+    async getLabelById(
         input: GetLabelByIdRepositoryInput
     ): Promise<GetLabelByIdRepositoryOutput> {
         try {

@@ -8,7 +8,7 @@ import {
 import { TodoRepoSaveModel } from "./repository.model";
 
 export class SaveTodoAsyncStorageRepository implements ISaveTodoRepository {
-    async execute(
+    async saveTodo(
         todo: SaveTodoRepositoryInput
     ): Promise<SaveTodoRepositoryOutput> {
         try {

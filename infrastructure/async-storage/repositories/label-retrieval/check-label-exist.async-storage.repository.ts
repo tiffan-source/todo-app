@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export class CheckLabelExistAsyncStorageRepository
     implements ICheckLabelExistRepository
 {
-    async execute(
+    async checkLabelExists(
         input: CheckLabelExistRepositoryInput
     ): Promise<CheckLabelExistRepositoryOutput> {
         try {

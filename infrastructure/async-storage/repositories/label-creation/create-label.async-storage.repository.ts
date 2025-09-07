@@ -9,7 +9,7 @@ import { LabelRepoSaveModel } from "../common/repository.model";
 export class CreateLabelAsyncStorageRepository
     implements ICreateLabelRepository
 {
-    async execute(
+    async createLabel(
         label: CreateLabelRepositoryInput
     ): Promise<CreateLabelRepositoryOutput> {
         try {

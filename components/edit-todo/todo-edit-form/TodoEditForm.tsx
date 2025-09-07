@@ -200,7 +200,7 @@ const TodoEditForm = ({
                     })}
                 >
                     {waitingForEdition && <ButtonSpinner />}
-                    <ButtonText>Create</ButtonText>
+                    <ButtonText>Save</ButtonText>
                 </Button>
             </Box>
         </TouchableWithoutFeedback>
