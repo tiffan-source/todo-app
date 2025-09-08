@@ -8979,18 +8979,18 @@ todo-entity@^2.0.0, todo-entity@^2.3.0:
   integrity sha512-fQBs9iIGqjfxEaTagfpu3q75pZ/6/L+Fo7BVHQrsT1RoW1ig0d79QgBD08rLvkihd6s7tv2PUUJFcEwYWvIiCQ==
 
 todo-usecase-default@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.npmjs.org/todo-usecase-default/-/todo-usecase-default-3.2.1.tgz"
-  integrity sha512-uMxf68skaWqcTOk2ktf7U+S2XqQOyJoA2a7lT0egkIhn2WEc9hZChoUOuDryKW736dReMT/lPlm22E45htcgTg==
+  version "3.3.1"
+  resolved "https://registry.npmjs.org/todo-usecase-default/-/todo-usecase-default-3.3.1.tgz"
+  integrity sha512-DXwuyFJP8c3G1T9cc1M+ChP9OarN7x6ZWa3v1CsDbuRmw4U0kUkfz15CSMtnmHmkT6Y3UKB7IukdgPJsNBGg3g==
   dependencies:
     todo-entity "^2.0.0"
     todo-usecase "^6.0.0"
     validator "^13.15.15"
 
 todo-usecase@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.npmjs.org/todo-usecase/-/todo-usecase-6.0.0.tgz"
-  integrity sha512-Cc6ocsQQnNml+cKq495HuSqTgXZDAqGesO4g4cTvHO2iTdNqdJcX/5YhL4u+dvCTvpx7d+2lomrO94tu4xmLFA==
+  version "6.1.0"
+  resolved "https://registry.npmjs.org/todo-usecase/-/todo-usecase-6.1.0.tgz"
+  integrity sha512-EnzkQIuaPnVeKpMJ12YzVnjO1Yb53Uv1zN6Ly6jWkMr42i/wIRQWzySQcDuRuex3DFuT1ubIzTBLj7Aenwgv0Q==
   dependencies:
     "@changesets/cli" "^2.29.5"
     todo-entity "^2.0.0"

@@ -5,8 +5,10 @@ import { Heading } from "@/components/ui/heading";
 import { CalendarDaysIcon, DownloadIcon, Icon } from "@/components/ui/icon";
 import { Link } from "expo-router";
 import { Pressable } from "react-native";
+import useEffectLoadLabel from "@/components/common/hooks/useLoadLabel";
 
 export default function Index() {
+    useEffectLoadLabel();
     return (
         <>
             <Box className="flex-row p-4 gap-4">

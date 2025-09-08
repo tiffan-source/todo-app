@@ -12,17 +12,23 @@ interface LabelStore {
         color: string;
     }[];
 
+    labelsSelected?: string[];
+
     labelsRetrieved?: {
         errorMessage?: string;
         success: boolean;
     };
 
     presentLabels: (output: outputDto<GetAllLabelOutput>) => void;
+
+    resetLabelsSelected: () => void;
+    setLabelsSelected: (labelIds: string[]) => void;
 }
 
 export const useLabelStore = create<LabelStore>()((set) => ({
     labels: [],
     labelsRetrieved: undefined,
+    labelsSelected: [],
 
     presentLabels: (output: outputDto<GetAllLabelOutput>) => {
         let { error, success, result } = output;
@@ -44,6 +50,10 @@ export const useLabelStore = create<LabelStore>()((set) => ({
             });
         }
     },
+
+    resetLabelsSelected: () => set({ labelsSelected: [] }),
+    setLabelsSelected: (labelIds: string[]) =>
+        set({ labelsSelected: labelIds }),
 }));
 
 export const getAllLabelUseCase: IGetAllLabelPresenter = {

@@ -74,6 +74,17 @@ export class GetAllTodoAsyncStorageRepository implements IGetAllTodoRepository {
                         }
                     }
 
+                    for (const labelId of filters?.labelsIds ?? []) {
+                        if (
+                            !domainTodo
+                                .getLabels()
+                                .find((label) => label.getId() === labelId)
+                        ) {
+                            console.log("Label filter not ``matched:", labelId);
+                            return; // Skip if label is not found
+                        }
+                    }
+
                     result.push(domainTodo);
                 });
                 return result;

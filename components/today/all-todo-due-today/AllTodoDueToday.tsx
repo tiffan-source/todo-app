@@ -15,6 +15,7 @@ import useEffectCheckTodoFromToday from "./hooks/check-todo-from-today.hook";
 import { InteractorGraph } from "@/main/interactor.graph";
 import { useTodayTodoStore } from "./stores/today-todo.store";
 import { useRouter } from "expo-router";
+import LabelFilter from "@/components/common/label-filter/LabelFilter";
 
 const AllTodoDueToday = ({
     checkTodoUseCase,
@@ -29,71 +30,76 @@ const AllTodoDueToday = ({
     const router = useRouter();
 
     return (
-        <FlatList
-            className="p-4"
-            data={todos}
-            renderItem={({ item }) => (
-                <Card
-                    size="md"
-                    className="mb-4 flex flex-row items-start justify-start gap-4"
-                >
-                    <Checkbox
-                        className="mt-1"
-                        value={"unchecked"} // This must always be unchecked
+        <>
+            <LabelFilter />
+            <FlatList
+                className="p-4"
+                data={todos}
+                renderItem={({ item }) => (
+                    <Card
                         size="md"
-                        onChange={() => {
-                            checkTodoUseCase.execute({
-                                timestamp: new Date(),
-                                input: {
-                                    todoId: item.id,
-                                },
-                            });
-                        }}
+                        className="mb-4 flex flex-row items-start justify-start gap-4"
                     >
-                        <CheckboxIndicator>
-                            <CheckboxIcon as={CheckIcon} />
-                        </CheckboxIndicator>
-                    </Checkbox>
-                    <View>
-                        <Pressable
-                            onPress={() => {
-                                useTodoStore.getState().resetTodoSelectToEdit();
-                                getTodoByIdForEditionUseCase.execute({
-                                    input: {
-                                        idTodo: item.id,
-                                    },
+                        <Checkbox
+                            className="mt-1"
+                            value={"unchecked"} // This must always be unchecked
+                            size="md"
+                            onChange={() => {
+                                checkTodoUseCase.execute({
                                     timestamp: new Date(),
+                                    input: {
+                                        todoId: item.id,
+                                    },
                                 });
-                                router.push(`/${item.id}`);
                             }}
                         >
-                            <Text
-                                size="lg"
-                                bold
+                            <CheckboxIndicator>
+                                <CheckboxIcon as={CheckIcon} />
+                            </CheckboxIndicator>
+                        </Checkbox>
+                        <View>
+                            <Pressable
+                                onPress={() => {
+                                    useTodoStore
+                                        .getState()
+                                        .resetTodoSelectToEdit();
+                                    getTodoByIdForEditionUseCase.execute({
+                                        input: {
+                                            idTodo: item.id,
+                                        },
+                                        timestamp: new Date(),
+                                    });
+                                    router.push(`/${item.id}`);
+                                }}
                             >
-                                {item.title}
-                            </Text>
-                        </Pressable>
-                        <Text>{item.description}</Text>
-                        <View className="flex flex-row items-center gap-2 mt-2">
-                            {item.labels.map((label) => (
-                                <View
-                                    key={label.id}
-                                    className="px-2 py-1 rounded-full"
-                                    style={{
-                                        backgroundColor: label.color,
-                                    }}
+                                <Text
+                                    size="lg"
+                                    bold
                                 >
-                                    <Text className="font-semibold">
-                                        #{label.name}
-                                    </Text>
-                                </View>
-                            ))}
+                                    {item.title}
+                                </Text>
+                            </Pressable>
+                            <Text>{item.description}</Text>
+                            <View className="flex flex-row items-center gap-2 mt-2">
+                                {item.labels.map((label) => (
+                                    <View
+                                        key={label.id}
+                                        className="px-2 py-1 rounded-full"
+                                        style={{
+                                            backgroundColor: label.color,
+                                        }}
+                                    >
+                                        <Text className="font-semibold">
+                                            #{label.name}
+                                        </Text>
+                                    </View>
+                                ))}
+                            </View>
                         </View>
-                    </View>
-                </Card>
-            )}
-        />
+                    </Card>
+                )}
+            />
+        </>
     );
 };
 
