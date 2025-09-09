@@ -10,7 +10,6 @@ const useEffectCheckTodoFromBacklog = ({
         let sub = useTodoStore.subscribe(
             (store) => store.todoChecked,
             () => {
-                console.log("Todo checked, fetching all unaccomplished todos");
                 getAllUnDoneTodoUseCase.execute({
                     timestamp: new Date(),
                     input: {

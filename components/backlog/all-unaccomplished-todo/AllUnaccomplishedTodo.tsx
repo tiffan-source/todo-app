@@ -17,6 +17,8 @@ import useEffectGetAllUnaccomplishedTodo from "./hooks/get-unaccomplished-todo.h
 import { useUnaccomplishedTodoStore } from "./stores/unaccomplished-todo.store";
 import LabelFilter from "@/components/common/label-filter/LabelFilter";
 import { Box } from "@/components/ui/box";
+import LabelTag from "@/components/common/label-tag/LabelTag";
+import { dueDateFormat } from "@/utils/due-date-format";
 
 const AllUnaccomplishedTodo = ({
     checkTodoUseCase,
@@ -80,24 +82,19 @@ const AllUnaccomplishedTodo = ({
                                     {item.title}
                                 </Text>
                             </Pressable>
-                            <Text>{item.description}</Text>
-                            <View className="flex flex-row items-center gap-2 mt-2">
+                            {item.description && (
+                                <Text>{item.description}</Text>
+                            )}
+                            <View className="flex flex-row items-center gap-2">
                                 {item.labels.map((label) => (
-                                    <View
+                                    <LabelTag
                                         key={label.id}
-                                        className="px-2 py-1 rounded-full"
-                                        style={{
-                                            backgroundColor: label.color,
-                                        }}
-                                    >
-                                        <Text className="font-semibold">
-                                            #{label.name}
-                                        </Text>
-                                    </View>
+                                        label={label}
+                                    />
                                 ))}
                             </View>
                             {item.dueDate && (
-                                <Text>{item.dueDate.toISOString()}</Text>
+                                <Text>{dueDateFormat(item.dueDate)}</Text>
                             )}
                         </View>
                     </Card>

@@ -8,10 +8,8 @@ export const useEditDateHook = () => {
         let sub = useTodoStore.subscribe(
             (state) => state.todoSelectToEdit?.dueDate,
             (dueDate) => {
-                console.log("check to much rendering :", dueDate);
                 if (dueDate) {
                     let date = new Date(dueDate);
-                    console.log("useEditDateHook date : ", date);
                     setDate(date);
                 } else {
                     setDate(undefined);

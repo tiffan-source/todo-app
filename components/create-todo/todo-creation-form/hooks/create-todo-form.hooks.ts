@@ -7,7 +7,6 @@ export let useCreateTodoForm = () => {
         let sub = useTodoCreatedStore.subscribe(
             (state) => state.todoCreated?.success,
             (success) => {
-                console.log("useCreateTodoForm: success", success);
                 if (success === true) {
                     router.back();
                 } else if (success === false) {

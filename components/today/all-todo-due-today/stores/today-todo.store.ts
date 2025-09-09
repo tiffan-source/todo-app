@@ -1,3 +1,4 @@
+import { LabelUI } from "@/models/Label";
 import {
     GetAllTodoOutput,
     IGetAllTodoPresenter,
@@ -10,11 +11,7 @@ interface TodayTodoStore {
         id: string;
         title: string;
         description: string;
-        labels: {
-            id: string;
-            name: string;
-            color: string;
-        }[];
+        labels: LabelUI[];
     }[];
     todosRetrieved?: {
         errorMessage?: string;
@@ -29,7 +26,6 @@ export const useTodayTodoStore = create<TodayTodoStore>()((set) => ({
     todosRetrieved: undefined,
 
     presentAllTodos: (output: outputDto<GetAllTodoOutput>) => {
-        console.log("presentAllTodos", output);
         let { error, success, result } = output;
         if (success && result) {
             set({

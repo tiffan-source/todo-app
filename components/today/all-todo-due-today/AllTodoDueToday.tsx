@@ -16,6 +16,8 @@ import { InteractorGraph } from "@/main/interactor.graph";
 import { useTodayTodoStore } from "./stores/today-todo.store";
 import { useRouter } from "expo-router";
 import LabelFilter from "@/components/common/label-filter/LabelFilter";
+import LabelTag from "@/components/common/label-tag/LabelTag";
+import { Box } from "@/components/ui/box";
 
 const AllTodoDueToday = ({
     checkTodoUseCase,
@@ -30,10 +32,10 @@ const AllTodoDueToday = ({
     const router = useRouter();
 
     return (
-        <>
+        <Box className="p-4">
             <LabelFilter />
             <FlatList
-                className="p-4"
+                className="mt-4"
                 data={todos}
                 renderItem={({ item }) => (
                     <Card
@@ -79,27 +81,22 @@ const AllTodoDueToday = ({
                                     {item.title}
                                 </Text>
                             </Pressable>
-                            <Text>{item.description}</Text>
-                            <View className="flex flex-row items-center gap-2 mt-2">
+                            {item.description && (
+                                <Text>{item.description}</Text>
+                            )}
+                            <View className="flex flex-row items-center gap-2">
                                 {item.labels.map((label) => (
-                                    <View
+                                    <LabelTag
                                         key={label.id}
-                                        className="px-2 py-1 rounded-full"
-                                        style={{
-                                            backgroundColor: label.color,
-                                        }}
-                                    >
-                                        <Text className="font-semibold">
-                                            #{label.name}
-                                        </Text>
-                                    </View>
+                                        label={label}
+                                    />
                                 ))}
                             </View>
                         </View>
                     </Card>
                 )}
             />
-        </>
+        </Box>
     );
 };
 

@@ -23,14 +23,16 @@ export class SaveTodoAsyncStorageRepository implements ISaveTodoRepository {
                 throw new Error("Todo not found");
             }
 
+            let dueDate: Date | undefined = todo.getDueDate();
             let doneDate: Date | undefined = todo.getDoneDate();
 
             todos[existingIndex] = {
                 id: todo.getId(),
                 title: todo.getTitle(),
                 description: todo.getDescription(),
-                doneDate: doneDate ? doneDate.toISOString() : undefined,
+                dueDate: dueDate ? dueDate.toISOString() : undefined,
                 labels: todo.getLabels().map((label) => label.getId()),
+                doneDate: doneDate ? doneDate.toISOString() : undefined,
             };
 
             // Save back to AsyncStorage

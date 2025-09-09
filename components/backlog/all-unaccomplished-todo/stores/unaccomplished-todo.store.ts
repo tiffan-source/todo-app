@@ -1,3 +1,4 @@
+import { LabelUI } from "@/models/Label";
 import {
     GetAllTodoOutput,
     GetTodoByIdOutput,
@@ -12,11 +13,7 @@ interface UnaccomplishedTodoStore {
         title: string;
         description: string;
         dueDate: Date | null;
-        labels: {
-            id: string;
-            name: string;
-            color: string;
-        }[];
+        labels: LabelUI[];
     }[];
     todosRetrieved?: {
         errorMessage?: string;
@@ -32,7 +29,6 @@ export const useUnaccomplishedTodoStore = create<UnaccomplishedTodoStore>()(
         todoChecked: undefined,
 
         presentAllTodos: (output: outputDto<GetAllTodoOutput>) => {
-            console.log("presentAllTodos", output);
             let { error, success, result } = output;
             if (success && result) {
                 set({

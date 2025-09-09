@@ -148,7 +148,6 @@ const TodoEditForm = ({
                         <Box>
                             {date &&
                                 (() => {
-                                    console.log("date inside picker: ", date);
                                     return (
                                         <DateTimePicker
                                             value={date}
@@ -176,6 +175,8 @@ const TodoEditForm = ({
                         />
                     </Box>
                 </Box>
+
+                <Text className="text-error-500">{errorMessage}</Text>
 
                 <Button
                     onPress={handleSubmit((data) => {
